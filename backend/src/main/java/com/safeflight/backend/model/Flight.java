@@ -49,6 +49,22 @@ public class Flight {
 	@Column(nullable = false) 
     private Boolean domestic;
 	
+	public Flight(Long id, String flightNumber, String airline, String fromCity, String toCity,
+            LocalDate departureDate, LocalTime departureTime, LocalTime arrivalTime,
+            Double basePrice, Integer availableSeats, Boolean domestic) {
+        this.id = id;
+        this.flightNumber = flightNumber;
+        this.airline = airline;
+        this.fromCity = fromCity;
+        this.toCity = toCity;
+        this.departureDate = departureDate;
+        this.departureTime = departureTime;
+        this.arrivalTime = arrivalTime;
+        this.basePrice = basePrice;
+        this.availableSeats = availableSeats;
+        this.domestic = domestic;
+    }
+
 	
     public Long getId() {
 		return id;

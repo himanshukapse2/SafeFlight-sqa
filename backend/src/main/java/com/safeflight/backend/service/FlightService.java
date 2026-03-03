@@ -17,7 +17,7 @@ public class FlightService {
 	}
 	
 	public List<Flight> searchFlights(LocalDate date, String fromCity, String toCity) {
-        return flightRepo.findByDepartureDateFromCity(date, fromCity, toCity);
+        return flightRepo.findByDepartureDateAndFromCityAndToCity(date, fromCity, toCity);
     }
 	
 	public Flight getFlightById(Long id) {

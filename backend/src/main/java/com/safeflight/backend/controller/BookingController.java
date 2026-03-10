@@ -2,7 +2,7 @@ package com.safeflight.backend.controller;
 
 import java.util.List;
 import org.springframework.ui.Model;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,7 +66,7 @@ public class BookingController {
             return "book";
         }
 
-        User user = userService.findByEmail(auth.name());
+        User user = userService.findByEmail(auth.getName());
 
         try {
             Booking booking = bookingService.createBooking(user, flight, dto);
@@ -88,7 +88,7 @@ public class BookingController {
 
     @GetMapping("/my")
     public String myBookings(Authentication auth, Model model) {
-        User user = userService.findByEmail(auth.name());
+        User user = userService.findByEmail(auth.getName());
         List<Booking> upcoming = bookingService.getUpcomingBookings(user);
         List<Booking> past = bookingService.getPastBookings(user);
         model.addAttribute("upcomingBookings", upcoming);
@@ -98,7 +98,7 @@ public class BookingController {
 
     @GetMapping("/cancel/{bookingId}")
     public String cancelConfirm(@PathVariable Long bookingId, Authentication auth, Model model) {
-        User user = userService.findByEmail(auth.name());
+        User user = userService.findByEmail(auth.getName());
         Booking booking = bookingService.getBookingById(bookingId);
 
         if (booking == null || booking.getUser() == null || user == null ||
@@ -116,7 +116,7 @@ public class BookingController {
     public String cancelBooking(@PathVariable Long bookingId,
             Authentication auth,
             RedirectAttributes redirectAttributes) {
-        User user = userService.findByEmail(auth.name());
+        User user = userService.findByEmail(auth.getName());
         Booking cancelled = bookingService.cancelBooking(bookingId, user);
         redirectAttributes.addFlashAttribute("successMessage",
                 String.format("Booking #%d cancelled. Refund: ₹%.2f", cancelled.getId(),

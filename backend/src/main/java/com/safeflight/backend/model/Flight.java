@@ -48,7 +48,7 @@ public class Flight {
 
 	@Column(nullable = false) 
     private Boolean domestic;
-	
+	public Flight() {}
 	public Flight(Long id, String flightNumber, String airline, String fromCity, String toCity,
             LocalDate departureDate, LocalTime departureTime, LocalTime arrivalTime,
             Double basePrice, Integer availableSeats, Boolean domestic) {

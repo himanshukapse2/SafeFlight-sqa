@@ -4,7 +4,8 @@ import org.springframework.aop.ThrowsAdvice;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.safeflight.backend.dto.SignupDto;
+import com.safeflight.backend.dto.SignupRequestDto;
+import com.safeflight.backend.model.Role;
 import com.safeflight.backend.model.User;
 import com.safeflight.backend.repository.UserRepo;
 
@@ -18,7 +19,7 @@ public class UserService {
 		this.passwordEncoder = 	passwordEncoder;
 	}
 	
-	public User signUp(SignupDto dto) {
+	public User signUp(SignupRequestDto dto) {
 		if(userRepo.existsByEmail(dto.getEmail())) {
 			throw new IllegalArgumentException("User Already Exists.");
 		}
@@ -26,7 +27,8 @@ public class UserService {
 		User user = new User();
 		user.setName(dto.getName());
 		user.setEmail(dto.getEmail());
-		user.setPassword(dto.getPassword());
+		user.setPassword(passwordEncoder.encode(dto.getPassword()));
+		user.setRole(Role.USER);
 		
 		return userRepo.save(user);
 	}

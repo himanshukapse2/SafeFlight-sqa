@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 
 public interface FlightRepo extends JpaRepository<Flight, Long>{
-	List<Flight> findByDepartureDateFromCity(LocalDate departureDate, String fromCity, String toCity);
+	List<Flight> findByDepartureDateAndFromCityAndToCity(LocalDate departureDate, String fromCity, String toCity);
+
 }
-}
+

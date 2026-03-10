@@ -1,13 +1,11 @@
 package com.safeflight.backend.config;
 
-
-import com.safeflight.*;
-import com.safeflight.backend.model.Flight;
-import com.safeflight.backend.repository.FlightRepo;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.safeflight.backend.model.Flight;
+import com.safeflight.backend.repository.FlightRepo;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

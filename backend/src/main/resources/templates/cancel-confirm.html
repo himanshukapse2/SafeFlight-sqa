@@ -5,24 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cancel Booking | SafeFlight</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-bold" th:href="@{/}"><i class="bi  me-2"></i>SafeFlight</a>
+            <a class="navbar-brand fw-bold" th:href="@{/}">SafeFlight</a>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/}"><i class="bi me-1"></i>Search
-                            Flights</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/bookings/my}"><i
-                                class="bi  me-1"></i>My Bookings</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">SearchFlights</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/bookings/my}">MyBookings</a></li>
                 </ul>
+
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <span class="nav-link text-light"><i class="bi  me-1"></i><span
+                        <span class="nav-link text-light"><span
                                 sec:authentication="principal.username">User</span></span>
                     </li>
                 </ul>
@@ -35,63 +34,71 @@
             <div class="col-lg-7">
                 <div class="card shadow border-0">
                     <div class="card-header bg-danger text-white">
-                        <h5 class="mb-0"><i class="bi  me-2"></i>Cancel Booking Confirmation</h5>
+                        <h5 class="mb-0">CancelBookingConfirmation</h5>
                     </div>
-                    <div class="card-body p-4">
-                        
 
+                    <div class="card-body p-4">
                         <table class="table table-borderless">
                             <tr>
-                                <th class="text-muted" width="35%">Booking ID</th>
+                                <th class="text-muted" width="35%">BookingID</th>
                                 <td class="fw-bold">#<span th:text="${booking.id}"></span></td>
                             </tr>
+
                             <tr>
                                 <th class="text-muted">Flight</th>
-                                <td th:text="${booking.flight.flightNumber + ' — ' + booking.flight.airline}"></td>
+                                <td th:text="${booking.flight.flightNumber+' — '+booking.flight.airline}"></td>
                             </tr>
+
                             <tr>
                                 <th class="text-muted">Route</th>
-                                <td th:text="${booking.flight.fromCity + ' → ' + booking.flight.toCity}"></td>
+                                <td th:text="${booking.flight.fromCity+' → '+booking.flight.toCity}"></td>
                             </tr>
+
                             <tr>
-                                <th class="text-muted">Departure Date</th>
-                                <td th:text="${#temporals.format(booking.flight.departureDate, 'dd MMM yyyy')}"></td>
+                                <th class="text-muted">DepartureDate</th>
+                                <td th:text="${#temporals.format(booking.flight.departureDate,'ddMMMyyy')}"></td>
                             </tr>
+
                             <tr>
                                 <th class="text-muted">Passenger</th>
                                 <td th:text="${booking.passengerName}"></td>
                             </tr>
+
                             <tr>
-                                <th class="text-muted">Total Fare Paid</th>
+                                <th class="text-muted">TotalFarePaid</th>
                                 <td class="fw-bold">₹<span
-                                        th:text="${#numbers.formatDecimal(booking.totalFare, 0, 2)}"></span></td>
+                                        th:text="${#numbers.formatDecimal(booking.totalFare,0,2)}"></span></td>
                             </tr>
+
                             <tr>
-                                <th class="text-muted">Refund Policy</th>
+                                <th class="text-muted">RefundPolicy</th>
                                 <td>
                                     <span th:text="${refundInfo}"></span>
                                 </td>
                             </tr>
                         </table>
+
                         <div class="card bg-light border-0 mt-3">
                             <div class="card-body small">
-                                <strong><i class="bi  me-1"></i>Refund Information:</strong>
+                                <strong>RefundInformation:</strong>
                                 <ul class="mb-0 mt-1">
-                                    <li><strong>7+ days</strong> before departure: 90% refund</li>
-                                    <li><strong>3-6 days</strong> before departure: 50% refund</li>
-                                    <li><strong>1-2 days</strong> before departure: 25% refund</li>
-                                    <li><strong>Same day</strong>: No refund</li>
+                                    <li><strong>7+days</strong>beforedeparture:90%refund</li>
+                                    <li><strong>3-6days</strong>beforedeparture:50%refund</li>
+                                    <li><strong>1-2days</strong>beforedeparture:25%refund</li>
+                                    <li><strong>Sameday</strong>:Norefund</li>
                                 </ul>
                             </div>
                         </div>
 
                         <div class="d-flex justify-content-between mt-4">
+
                             <a th:href="@{/bookings/my}" class="btn btn-outline-secondary">
-                                <i class="bi me-1"></i>Go Back
+                                GoBack
                             </a>
+
                             <form th:action="@{/bookings/cancel/{id}(id=${booking.id})}" method="post">
                                 <button type="submit" class="btn btn-danger">
-                                    <i class="bi  me-1"></i>Confirm Cancellation
+                                    ConfirmCancellation
                                 </button>
                             </form>
                         </div>
@@ -102,6 +109,18 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var btn=document.querySelector('button[type="submit"]');
+        var frm=document.querySelector('form');
+
+        btn.addEventListener('click',function(){
+            console.log('Cancel button clicked');
+        });
+
+        frm.addEventListener('submit',function(e){
+            console.log('Cancellation form submitted');
+        });
+    </script>
 </body>
 
 </html>

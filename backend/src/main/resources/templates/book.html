@@ -39,42 +39,50 @@
     <main class="container py-4">
         <div class="row g-4">
             <div class="col-lg-5">
+
                 <div class="card shadow border-0">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="bi  me-2"></i>Flight Details</h5>
+                        <h5 class="mb-0">FlightDetails</h5>
                     </div>
+
                     <div class="card-body">
                         <table class="table table-borderless mb-0">
                             <tr>
                                 <th class="text-muted">Flight</th>
-                                <td class="fw-bold" th:text="${flight.flightNumber + ' — ' + flight.airline}"></td>
+                                <td class="fw-bold" th:text="${flight.flightNumber+' — '+flight.airline}"></td>
                             </tr>
+
                             <tr>
                                 <th class="text-muted">Route</th>
-                                <td th:text="${flight.fromCity + ' → ' + flight.toCity}"></td>
+                                <td th:text="${flight.fromCity+' → '+flight.toCity}"></td>
                             </tr>
+
                             <tr>
                                 <th class="text-muted">Date</th>
-                                <td th:text="${#temporals.format(flight.departureDate, 'dd MMM yyyy')}"></td>
+                                <td th:text="${#temporals.format(flight.departureDate,'ddMMMyyy')}"></td>
                             </tr>
+
                             <tr>
                                 <th class="text-muted">Time</th>
-                                <td th:text="${flight.departureTime + ' — ' + flight.arrivalTime}"></td>
+                                <td th:text="${flight.departureTime+' — '+flight.arrivalTime}"></td>
                             </tr>
+
                             <tr>
                                 <th class="text-muted">Type</th>
                                 <td>
                                     <span class="text-muted"
-                                        th:text="${flight.domestic ? 'Domestic' : 'International'}"></span>
+                                        th:text="${flight.domestic?'Domestic':'International'}"></span>
                                 </td>
                             </tr>
+
                             <tr>
-                                <th class="text-muted">Base Price</th>
+                                <th class="text-muted">BasePrice</th>
                                 <td class="fw-bold text-primary">₹<span
-                                        th:text="${#numbers.formatDecimal(flight.basePrice, 0, 2)}"></span></td>
+                                        th:text="${#numbers.formatDecimal(flight.basePrice,0,2)}"></span></td>
                             </tr>
+
                             <tr>
-                                <th class="text-muted">Seats Left</th>
+                                <th class="text-muted">SeatsLeft</th>
                                 <td th:text="${flight.availableSeats}"></td>
                             </tr>
                         </table>
@@ -83,16 +91,18 @@
 
                 <div class="card shadow border-0 mt-3">
                     <div class="card-header bg-light">
-                        <h6 class="mb-0"><i class="bi me-2"></i>Pricing Info</h6>
+                        <h6 class="mb-0">PricingInfo</h6>
                     </div>
+
                     <div class="card-body small">
-                        <p class="mb-1"><strong>Baggage Rates:</strong></p>
+                        <p class="mb-1"><strong>BaggageRates:</strong></p>
                         <ul class="mb-2">
-                            <li>Domestic: ₹150/kg extra</li>
-                            <li>International: ₹350/kg extra</li>
+                            <li>Domestic:₹150/kgextra</li>
+                            <li>International:₹350/kgextra</li>
                         </ul>
-                        <p class="mb-1"><strong>Tax:</strong> 5% on subtotal</p>
-                        <p class="mb-0"><strong>Discounts:</strong> Senior 10%, Child 15%, Military 20%</p>
+
+                        <p class="mb-1"><strong>Tax:</strong>5%onsubtotal</p>
+                        <p class="mb-0"><strong>Discounts:</strong>Senior10%,Child15%,Military20%</p>
                     </div>
                 </div>
             </div>

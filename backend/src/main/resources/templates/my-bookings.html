@@ -5,34 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Bookings | SafeFlight</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
 </head>
 
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-bold" th:href="@{/}"><i class="bi  me-2"></i>SafeFlight</a>
+            <a class="navbar-brand fw-bold" th:href="@{/}">SafeFlight</a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/}"><i class="bi  me-1"></i>Search
-                            Flights</a></li>
-                    <li class="nav-item"><a class="nav-link active" th:href="@{/bookings/my}"><i
-                                class="bi  me-1"></i>My Bookings</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">SearchFlights</a></li>
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/bookings/my}">MyBookings</a></li>
                 </ul>
+
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <span class="nav-link text-light"><i class="bi  me-1"></i><span
+                        <span class="nav-link text-light"><span
                                 sec:authentication="principal.username">User</span></span>
                     </li>
+
                     <li class="nav-item">
                         <form th:action="@{/logout}" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-outline-light btn-sm ms-2"><i
-                                    class="bi  me-1"></i>Logout</button>
+                            <button type="submit" class="btn btn-outline-light btn-sm ms-2">Logout</button>
                         </form>
                     </li>
                 </ul>
@@ -42,125 +41,138 @@
 
     <main class="container py-4">
         <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
-            <i class="bi me-2"></i><span th:text="${successMessage}"></span>
+            <span th:text="${successMessage}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
 
-        <h3 class="fw-bold mb-4"><i class="bi  text-primary me-2"></i>My Bookings</h3>
+        <h3 class="fw-bold mb-4">MyBookings</h3>
 
         <div class="mb-5">
             <h5 class="fw-semibold text-success mb-3">
-                <i class="bi b me-1"></i>Upcoming Bookings
+                UpcomingBookings
                 <span class="badge bg-success ms-2" th:text="${#lists.size(upcomingBookings)}">0</span>
             </h5>
 
             <div th:if="${#lists.isEmpty(upcomingBookings)}" class="text-center py-4 bg-light rounded">
-                <i class="bi text-muted"></i>
-                <p class="text-muted mt-2">No upcoming bookings</p>
-                <a th:href="@{/}" class="btn btn-primary btn-sm">Search Flights</a>
+                <p class="text-muted mt-2">Noupcomingbookings</p>
+                <a th:href="@{/}" class="btn btn-primary btn-sm">SearchFlights</a>
             </div>
 
-            <div th:each="booking : ${upcomingBookings}" class="card shadow-sm border-0 mb-3 booking-card">
+            <div th:each="booking:${upcomingBookings}" class="card shadow-sm border-0 mb-3 booking-card">
                 <div class="card-body p-4">
                     <div class="row align-items-center">
-                        
+
                         <div class="col-md-3">
                             <h6 class="fw-bold mb-1"
-                                th:text="${booking.flight.flightNumber + ' — ' + booking.flight.airline}"></h6>
+                                th:text="${booking.flight.flightNumber+' — '+booking.flight.airline}"></h6>
                             <small class="text-muted"
-                                th:text="${booking.flight.fromCity + ' → ' + booking.flight.toCity}"></small>
+                                th:text="${booking.flight.fromCity+' → '+booking.flight.toCity}"></small>
                         </div>
+
                         <div class="col-md-2">
                             <small class="text-muted">Date</small><br>
                             <span class="fw-semibold"
-                                th:text="${#temporals.format(booking.flight.departureDate, 'dd MMM yyyy')}"></span>
+                                th:text="${#temporals.format(booking.flight.departureDate,'ddMMMyyy')}"></span>
                         </div>
+
                         <div class="col-md-2">
                             <small class="text-muted">Passenger</small><br>
                             <span th:text="${booking.passengerName}"></span>
                         </div>
+
                         <div class="col-md-2">
-                            <small class="text-muted">Total Fare</small><br>
+                            <small class="text-muted">TotalFare</small><br>
                             <span class="fw-bold text-primary">₹<span
-                                    th:text="${#numbers.formatDecimal(booking.totalFare, 0, 2)}"></span></span>
+                                    th:text="${#numbers.formatDecimal(booking.totalFare,0,2)}"></span></span>
                         </div>
+
                         <div class="col-md-2 text-end">
                             <a th:href="@{/bookings/cancel/{id}(id=${booking.id})}"
-                                class="btn btn-outline-danger ">
-                                <i class="  me-1"></i>Cancel
+                                class="btn btn-outline-danger">
+                                Cancel
                             </a>
                         </div>
                     </div>
+
                     <div class="mt-3 pt-3 border-top"></div>
-                        <div class="row small text-muted">
-                            <div class="col-md-2">
-                                <strong>Booking ID:</strong> #<span th:text="${booking.id}"></span>
-                            </div>
-                            <div class="col-md-2">
-                                <strong>Base Fare:</strong> ₹<span
-                                    th:text="${booking.baseFare != null ? #numbers.formatDecimal(booking.baseFare, 0, 2) : '-'}"></span>
-                            </div>
-                            <div class="col-md-2">
-                                <strong>Baggage:</strong> ₹<span
-                                    th:text="${booking.baggageCharge != null ? #numbers.formatDecimal(booking.baggageCharge, 0, 2) : '0.00'}"></span>
-                            </div>
-                            <div class="col-md-2">
-                                <strong>Discount:</strong> -₹<span
-                                    th:text="${booking.discountAmount != null ? #numbers.formatDecimal(booking.discountAmount, 0, 2) : '0.00'}"></span>
-                            </div>
-                            <div class="col-md-2">
-                                <strong>Tax:</strong> ₹<span
-                                    th:text="${booking.taxAmount != null ? #numbers.formatDecimal(booking.taxAmount, 0, 2) : '-'}"></span>
-                            </div>
-                            <div class="col-md-2">
-                                <strong>Booked:</strong> <span
-                                    th:text="${#temporals.format(booking.bookingDate, 'dd MMM, HH:mm')}"></span>
-                            </div>
+                    <div class="row small text-muted">
+                        <div class="col-md-2">
+                            <strong>BookingID:</strong> #<span th:text="${booking.id}"></span>
+                        </div>
+
+                        <div class="col-md-2">
+                            <strong>BaseFare:</strong> ₹<span
+                                th:text="${booking.baseFare!=null?#numbers.formatDecimal(booking.baseFare,0,2):'-'}"></span>
+                        </div>
+
+                        <div class="col-md-2">
+                            <strong>Baggage:</strong> ₹<span
+                                th:text="${booking.baggageCharge!=null?#numbers.formatDecimal(booking.baggageCharge,0,2):'0.00'}"></span>
+                        </div>
+
+                        <div class="col-md-2">
+                            <strong>Discount:</strong> -₹<span
+                                th:text="${booking.discountAmount!=null?#numbers.formatDecimal(booking.discountAmount,0,2):'0.00'}"></span>
+                        </div>
+
+                        <div class="col-md-2">
+                            <strong>Tax:</strong> ₹<span
+                                th:text="${booking.taxAmount!=null?#numbers.formatDecimal(booking.taxAmount,0,2):'-'}"></span>
+                        </div>
+
+                        <div class="col-md-2">
+                            <strong>Booked:</strong> <span
+                                th:text="${#temporals.format(booking.bookingDate,'ddMMM,HH:mm')}"></span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div>
             <h5 class="fw-semibold text-secondary mb-3">
-                <i class="bi  me-1"></i>Past &amp; Cancelled Bookings
+                Past&amp;CancelledBookings
                 <span class="badge bg-secondary ms-2" th:text="${#lists.size(pastBookings)}">0</span>
             </h5>
 
             <div th:if="${#lists.isEmpty(pastBookings)}" class="text-center py-4 bg-light rounded">
-                <p class="text-muted mb-0">No past bookings</p>
+                <p class="text-muted mb-0">Nopastbookings</p>
             </div>
 
-            <div th:each="booking : ${pastBookings}" class="card shadow-sm border-0 mb-3 booking-card-past">
+            <div th:each="booking:${pastBookings}" class="card shadow-sm border-0 mb-3 booking-card-past">
                 <div class="card-body p-4">
                     <div class="row align-items-center">
-                        
+
                         <div class="col-md-3">
                             <h6 class="fw-bold mb-1"
-                                th:text="${booking.flight.flightNumber + ' — ' + booking.flight.airline}"></h6>
+                                th:text="${booking.flight.flightNumber+' — '+booking.flight.airline}"></h6>
                             <small class="text-muted"
-                                th:text="${booking.flight.fromCity + ' → ' + booking.flight.toCity}"></small>
+                                th:text="${booking.flight.fromCity+' → '+booking.flight.toCity}"></small>
                         </div>
+
                         <div class="col-md-2">
                             <small class="text-muted">Date</small><br>
-                            <span th:text="${#temporals.format(booking.flight.departureDate, 'dd MMM yyyy')}"></span>
+                            <span th:text="${#temporals.format(booking.flight.departureDate,'ddMMMyyy')}"></span>
                         </div>
+
                         <div class="col-md-2">
                             <small class="text-muted">Passenger</small><br>
                             <span th:text="${booking.passengerName}"></span>
                         </div>
+
                         <div class="col-md-2">
                             <small class="text-muted">Status</small><br>
                             <span class="badge text-muted"
                                 th:text="${booking.status}"></span>
                         </div>
+
                         <div class="col-md-2 text-end">
                             <small class="text-muted">Fare</small><br>
                             <span class="fw-semibold">₹<span
-                                    th:text="${#numbers.formatDecimal(booking.totalFare, 0, 2)}"></span></span>
-                            <div th:if="${booking.refundAmount != null && booking.refundAmount > 0}" class="mt-1">
-                                <small class="text-success">Refund: ₹<span
-                                        th:text="${#numbers.formatDecimal(booking.refundAmount, 0, 2)}"></span></small>
+                                    th:text="${#numbers.formatDecimal(booking.totalFare,0,2)}"></span></span>
+                            <div th:if="${booking.refundAmount!=null&&booking.refundAmount>0}" class="mt-1">
+                                <small class="text-success">Refund:₹<span
+                                        th:text="${#numbers.formatDecimal(booking.refundAmount,0,2)}"></span></small>
                             </div>
                         </div>
                     </div>
@@ -168,7 +180,18 @@
             </div>
         </div>
     </main>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var btns=document.querySelectorAll('.btn-outline-danger');
+        console.log('Found '+btns.length+' cancel buttons');
+
+        btns.forEach(function(b){
+            b.addEventListener('click',function(){
+                console.log('Cancel button clicked');
+            });
+        });
+    </script>
 </body>
 
 </html>

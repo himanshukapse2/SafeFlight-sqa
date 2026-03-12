@@ -8,45 +8,43 @@
 
 </head>
 
-<body class="auth-page">
-    <div class="auth-container">
-        <div class="auth-card shadow-lg">
+<body >
+    <div >
+        <div >
 
-            <div style="text-align:center;margin-bottom:30px;padding-bottom:15px;">
-                <h2 style="font-weight:bold;margin-top:0px;margin-bottom:5px;color:#333;">CreateAccount</h2>
-                <p style="color:#999;font-size:14px;margin:0;">JoinSafeFlight today</p>
+            <div ><p>Join SafeFlight today</p>
             </div>
 
-            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+            <div th:if="${errorMessage}"  role="alert">
                 <span th:text="${errorMessage}"></span>
             </div>
 
             <form th:action="@{/signup}" method="post" th:object="${signupRequest}" name="signupForm" id="signupForm">
 
-                <div class="mb-3" style="margin-bottom:20px;">
-                    <label for="nameInput" class="form-label">FullName</label>
-                    <div class="input-group">
-                        <span class="input-group-text"></span>
+                <div  style="margin-bottom:20px;">
+                    <label for="nameInput" >FullName</label>
+                    <div >
+                        <span ></span>
                         <input type="text"
-                            class="form-control"
+                            
                             id="nameInput"
                             name="fullname"
                             th:field="*{name}"
-                            placeholder="Enteryourfullname"
+                            placeholder="Enter your fullname"
                             th:classappend="${#fields.hasErrors('name')}?'is-invalid':''"
                             required
                             maxlength="80">
                     </div>
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                    <div  th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
                 </div>
 
 
-                <div class="mb-3" style="margin-bottom:20px;">
-                    <label for="emailInput" class="form-label">EmailAddress</label>
-                    <div class="input-group">
-                        <span class="input-group-text"></span>
+                <div  style="margin-bottom:20px;">
+                    <label for="emailInput" >Email Address</label>
+                    <div >
+                        <span ></span>
                         <input type="email"
-                            class="form-control"
+                            
                             id="emailInput"
                             th:field="*{email}"
                             placeholder="your.email@example.com"
@@ -54,16 +52,16 @@
                             required>
                     </div>
 
-                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    <div  th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                 </div>
 
-                <div class="mb-3" style="margin-bottom:25px;">
+                <div  style="margin-bottom:25px;">
 
-                    <label for="passwordInput" class="form-label">Password</label>
-                    <div class="input-group">
-                        <span class="input-group-text"></span>
+                    <label for="passwordInput" >Password</label>
+                    <div >
+                        <span ></span>
                         <input type="password"
-                            class="form-control"
+                            
                             id="passwordInput"
                             th:field="*{password}"
                             placeholder="Enterpassword"
@@ -72,72 +70,28 @@
                             minlength="6">
                     </div>
 
-                    <small class="text-muted" style="display:block;margin-top:5px;"> Minimum6charactersrequired</small>
-                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                    <small  style="display:block;margin-top:5px;"> Minimum 6 characters required</small>
+                    <div  th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                 </div>
 
                 <button type="submit"
-                    class="btn btn-primary w-100"
+                    
                     id="submitBtn"
                     style="padding:10px;font-weight:600;font-size:16px;margin-top:15px;">
-                    CreateAccount
+                    Create Account
                 </button>
             </form>
 
             <div>
 
-                <span>Alreadyhaveanaccount?</span>
+                <span>Already have an account?</span>
                 <a th:href="@{/login}">SignIn</a>
             </div>
 
         </div>
     </div>
 
-    <script>
-        var frm=document.getElementById('signupForm');
-        var em=document.getElementById('emailInput');
 
-        var pwd=document.getElementById('passwordInput');
-        var btn=document.getElementById('submitBtn');
-
-        frm.addEventListener('submit',function(evt){
-            var emVal=em.value;
-            var pwdVal=pwd.value;
-
-            console.log('Form submitted with email: '+emVal);
-            console.log('Password length: '+pwdVal.length);
-
-            if(pwdVal.length<6){
-                alert('Password must be at least 6 characters');
-
-                evt.preventDefault();
-                return false;
-            }
-
-            var atIdx=emVal.indexOf('@');
-            if(atIdx<0){
-                console.error('Invalid email');
-            }
-        });
-
-        pwd.addEventListener('input',function(){
-            var ln=this.value.length;
-            console.log('Password changed, length: '+ln);
-
-            if(ln>=6){
-                console.log('Password is valid length');
-            }
-        });
-
-        em.addEventListener('change',function(){
-            console.log('Email changed to: '+this.value);
-        });
-
-
-        btn.addEventListener('click',function(){
-            console.log('Submit button clicked');
-        });
-    </script>
 </body>
 
 </html>

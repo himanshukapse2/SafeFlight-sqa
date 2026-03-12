@@ -8,49 +8,50 @@
 
 </head>
 
-<body class="auth-page">
-    <div class="auth-container">
-        <div class="auth-card shadow-lg">
+<body >
+    <div >
+        <div >
 
             <div style="text-align:center;margin-bottom:30px;padding-bottom:15px;">
                 <h2 style="font-weight:bold;margin-top:0px;margin-bottom:5px;color:#333;">SafeFlight</h2>
-                <p style="color:#999;font-size:14px;margin:0;">SignintoyourAccount</p>
+
+                <p style="color:#999;font-size:14px;margin:0;">Sign-in to your Account</p>
             </div>
 
-            <div th:if="${param.logout}" class="alert alert-info alert-sm">
-                <span>YouhavebeenloggedoutSuccessfully.</span>
+            <div th:if="${param.logout}" >
+                <span>You have been logged out Successfully.</span>
             </div>
 
-            <div th:if="${param.error}" class="alert alert-danger alert-sm">
-                <span>InvalidemailorPassword.</span>
+            <div th:if="${param.error}" >
+                <span>Invalid email or Password.</span>
             </div>
 
-            <div th:if="${successMessage}" class="alert alert-success alert-sm">
+            <div th:if="${successMessage}" >
                 <span th:text="${successMessage}"></span>
             </div>
 
             <form th:action="@{/login}" method="post">
 
-                <div class="mb-3" style="margin-bottom:20px;">
-                    <label for="username" class="form-label">EmailAddress</label>
-                    <div class="input-group">
-                        <span class="input-group-text"></span>
-                        <input type="email" class="form-control" id="username" name="username"
+                <div  style="margin-bottom:20px;">
+                    <label for="username" >Email Address</label>
+                    <div >
+                        <span ></span>
+                        <input type="email"  id="username" name="username"
                             placeholder="you@example.com" required autofocus>
                     </div>
                 </div>
 
-                <div class="mb-3" style="margin-bottom:25px;">
+                <div  style="margin-bottom:25px;">
 
-                    <label for="password" class="form-label">Password</label>
-                    <div class="input-group">
-                        <span class="input-group-text"></span>
-                        <input type="password" class="form-control" id="password" name="password"
+                    <label for="password" >Password</label>
+                    <div >
+                        <span ></span>
+                        <input type="password"  id="password" name="password"
                             placeholder="Enteryourpassword" required>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100"
+                <button type="submit" 
                     style="padding:10px;font-weight:600;font-size:16px;margin-top:15px;">
                     SignIn
                 </button>
@@ -58,38 +59,14 @@
 
             <div>
 
-                <span style="color:#666;">Donthaveanaccount?</span>
+                <span >Don't have an account?</span>
                 <a th:href="@{/signup}" style="color:#007bff;text-decoration:none;font-weight:600;">SignUp</a>
             </div>
 
         </div>
     </div>
 
-    <script>
-        var fm=document.querySelector('form');
-        var usr=document.getElementById('username');
-        var pwd=document.getElementById('password');
 
-        fm.addEventListener('submit',function(evt){
-            var usrVal=usr.value;
-            var pwdVal=pwd.value;
-
-            console.log('Login attempt with: '+usrVal);
-
-            if(usrVal.length<3){
-                alert('Usernametoosmall');
-                evt.preventDefault();
-            }
-        });
-
-        usr.addEventListener('input',function(){
-            console.log('Username changed');
-        });
-
-        pwd.addEventListener('input',function(){
-            console.log('Password input changed');
-        });
-    </script>
 </body>
 
 </html>

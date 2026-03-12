@@ -10,37 +10,38 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm" sec:authorize="isAuthenticated()">
-        <div class="container">
-            <a class="navbar-brand fw-bold" th:href="@{/}">
+    <nav  sec:authorize="isAuthenticated()">
+        <div >
+            <a  th:href="@{/}">
                 SafeFlight
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button  type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span ></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/}">SearchFlights</a>
+            <div  id="navbarNav">
+                <ul >
+                    <li >
+
+                        <a  th:href="@{/}">Search Flights</a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/bookings/my}">MyBookings</a>
+                    <li >
+                        <a  th:href="@{/bookings/my}">My Bookings</a>
                     </li>
                 </ul>
 
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <span class="nav-link text-light">
+                <ul >
+                    <li >
+                        <span >
                             <span sec:authentication="principal.username">User</span>
                         </span>
                     </li>
 
-                    <li class="nav-item">
-                        <form th:action="@{/logout}" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-outline-light btn-sm ms-2">
+                    <li >
+                        <form th:action="@{/logout}" method="post" >
+                            <button type="submit" >
                                 Logout
                             </button>
                         </form>
@@ -50,15 +51,19 @@
         </div>
     </nav>
 
-    <main class="container py-4">
-        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <main >
+
+        <div th:if="${successMessage}"  role="alert">
             <span th:text="${successMessage}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+
+            <button type="button"  data-bs-dismiss="alert"></button>
         </div>
 
-        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div th:if="${errorMessage}"  role="alert">
+
             <span th:text="${errorMessage}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+
+            <button type="button"  data-bs-dismiss="alert"></button>
         </div>
 
         <div layout:fragment="content"></div>

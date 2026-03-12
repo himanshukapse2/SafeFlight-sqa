@@ -4,31 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Flight | SkaeFlight</title>
+    <title>Book Flight | SafeFlight</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold" th:href="@{/}"><i class="bi me-2"></i>SafeFlight</a>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/}"><i class="bi  me-1"></i>Search
-                            Flights</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/bookings/my}"><i
-                                class="bi  me-1"></i>My Bookings</a></li>
+    <nav >
+        <div >
+            <a  th:href="@{/}"><i ></i>SafeFlight</a>
+            <div  id="navbarNav">
+                <ul >
+                    <li ><a  th:href="@{/}"><i ></i>SearchFlights</a></li>
+                    <li ><a  th:href="@{/bookings/my}"><i></i>My Bookings</a></li>
                 </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <span class="nav-link text-light"><i class="bi  me-1"></i><span
-                                sec:authentication="principal.username">User</span></span>
+                <ul >
+                    <li >
+                        <span ><i ></i><span
+                                sec:authentication="principal.username">User </span></span>
                     </li>
-                    <li class="nav-item">
-                        <form th:action="@{/logout}" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-outline-light btn-sm ms-2"><i
-                                    class="bi me-1"></i>Logout</button>
+                    <li >
+                        <form th:action="@{/logout}" method="post" >
+                            <button type="submit" ><i></i>Logout </button>
                         </form>
                     </li>
                 </ul>
@@ -36,137 +33,137 @@
         </div>
     </nav>
 
-    <main class="container py-4">
-        <div class="row g-4">
-            <div class="col-lg-5">
+    <main >
+        <div >
+            <div >
 
-                <div class="card shadow border-0">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">FlightDetails</h5>
+                <div >
+                    <div >
+                        <h5>Flight Details</h5>
                     </div>
 
-                    <div class="card-body">
-                        <table class="table table-borderless mb-0">
+                    <div>
+                        <table>
                             <tr>
-                                <th class="text-muted">Flight</th>
-                                <td class="fw-bold" th:text="${flight.flightNumber+' — '+flight.airline}"></td>
+                                <th>Flight</th>
+                                <td  th:text="${flight.flightNumber+' — '+flight.airline}"></td>
                             </tr>
 
                             <tr>
-                                <th class="text-muted">Route</th>
+                                <th>Route</th>
                                 <td th:text="${flight.fromCity+' → '+flight.toCity}"></td>
                             </tr>
 
                             <tr>
-                                <th class="text-muted">Date</th>
+                                <th >Date</th>
                                 <td th:text="${#temporals.format(flight.departureDate,'ddMMMyyy')}"></td>
                             </tr>
 
                             <tr>
-                                <th class="text-muted">Time</th>
+                                <th >Time</th>
                                 <td th:text="${flight.departureTime+' — '+flight.arrivalTime}"></td>
                             </tr>
 
                             <tr>
-                                <th class="text-muted">Type</th>
+                                <th >Type</th>
                                 <td>
-                                    <span class="text-muted"
+                                    <span 
                                         th:text="${flight.domestic?'Domestic':'International'}"></span>
                                 </td>
                             </tr>
 
                             <tr>
-                                <th class="text-muted">BasePrice</th>
-                                <td class="fw-bold text-primary">₹<span
-                                        th:text="${#numbers.formatDecimal(flight.basePrice,0,2)}"></span></td>
+                                <th >Base Price</th>
+                                <td >€<span
+                                        th:text="${#numbers.formatDecimal(flight.basePrice/100,0,2)}"></span></td>
                             </tr>
 
                             <tr>
-                                <th class="text-muted">SeatsLeft</th>
+                                <th >Seats Left</th>
                                 <td th:text="${flight.availableSeats}"></td>
                             </tr>
                         </table>
                     </div>
                 </div>
 
-                <div class="card shadow border-0 mt-3">
-                    <div class="card-header bg-light">
-                        <h6 class="mb-0">PricingInfo</h6>
+                <div >
+                    <div >
+                        <h6 >Pricing Info</h6>
                     </div>
 
-                    <div class="card-body small">
-                        <p class="mb-1"><strong>BaggageRates:</strong></p>
-                        <ul class="mb-2">
-                            <li>Domestic:₹150/kgextra</li>
-                            <li>International:₹350/kgextra</li>
+                    <div >
+                        <p ><strong>Baggage Rates:</strong></p>
+                        <ul >
+                            <li>Domestic:€1.5/kg extra</li>
+                            <li>International:€3.5/kg extra</li>
                         </ul>
 
-                        <p class="mb-1"><strong>Tax:</strong>5%onsubtotal</p>
-                        <p class="mb-0"><strong>Discounts:</strong>Senior10%,Child15%,Military20%</p>
+                        <p ><strong>Tax: </strong>5% on subtotal</p>
+                        <p ><strong>Discounts: </strong>Senior Citizen 10%, Child 15%,Military20%</p>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-7">
-                <div class="card shadow border-0">
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0"><i class="bi  me-2"></i>Passenger Details</h5>
+            <div >
+                <div >
+                    <div >
+                        <h5 ><i ></i>Passenger Details</h5>
                     </div>
-                    <div class="card-body p-4">
-                        <div th:if="${errorMessage}" class="alert alert-danger">
-                            <i class="bi bi-exclamation-triangle me-1"></i><span th:text="${errorMessage}"></span>
+                    <div >
+                        <div th:if="${errorMessage}" >
+                            <i ></i><span th:text="${errorMessage}"></span>
                         </div>
 
                         <form th:action="@{/bookings/book/{id}(id=${flight.id})}" method="post"
                             th:object="${bookingRequest}">
-                            <div class="mb-3">
-                                <label for="passengerName" class="form-label fw-semibold">Passenger Name</label>
-                                <input type="text" class="form-control" id="passengerName" th:field="*{passengerName}"
+                            <div >
+                                <label for="passengerName" >Passenger Name</label>
+                                <input type="text"  id="passengerName" th:field="*{passengerName}"
                                     th:classappend="${#fields.hasErrors('passengerName')} ? 'is-invalid'"
                                     placeholder="Full name as per ID">
-                                <div class="invalid-feedback" th:if="${#fields.hasErrors('passengerName')}"
+                                <div  th:if="${#fields.hasErrors('passengerName')}"
                                     th:errors="*{passengerName}"></div>
                             </div>
 
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="passengerAge" class="form-label fw-semibold">Age</label>
-                                    <input type="number" class="form-control" id="passengerAge"
+                            <div >
+                                <div >
+                                    <label for="passengerAge" >Age</label>
+                                    <input type="number"  id="passengerAge"
                                         th:field="*{passengerAge}"
                                         th:classappend="${#fields.hasErrors('passengerAge')} ? 'is-invalid'" min="1"
                                         max="120" placeholder="Age">
-                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('passengerAge')}"
+                                    <div  th:if="${#fields.hasErrors('passengerAge')}"
                                         th:errors="*{passengerAge}"></div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="extraBaggage" class="form-label fw-semibold">Extra Baggage (kg)</label>
-                                    <input type="number" class="form-control" id="extraBaggage"
+                                <div >
+                                    <label for="extraBaggage" >Extra Baggage (kg)</label>
+                                    <input type="number"  id="extraBaggage"
                                         th:field="*{extraBaggage}"
                                         th:classappend="${#fields.hasErrors('extraBaggage')} ? 'is-invalid'" min="0"
                                         max="50" placeholder="0" value="0">
-                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('extraBaggage')}"
+                                    <div  th:if="${#fields.hasErrors('extraBaggage')}"
                                         th:errors="*{extraBaggage}"></div>
                                 </div>
                             </div>
 
-                            <div class="mb-3 mt-3">
-                                <label for="discountType" class="form-label fw-semibold">Discount Category</label>
-                                <select class="form-select" id="discountType" th:field="*{discountType}"
+                            <div >
+                                <label for="discountType" >Discount Category</label>
+                                <select  id="discountType" th:field="*{discountType}"
                                     th:classappend="${#fields.hasErrors('discountType')} ? 'is-invalid'">
                                     <option value="">-- Select --</option>
                                     <option th:each="dt : ${discountTypes}" th:value="${dt}" th:text="${dt.label}">
                                     </option>
                                 </select>
-                                <div class="invalid-feedback" th:if="${#fields.hasErrors('discountType')}"
+                                <div  th:if="${#fields.hasErrors('discountType')}"
                                     th:errors="*{discountType}"></div>
                             </div>
 
                             <hr>
-                            <div class="d-flex justify-content-between">
-                                <a th:href="@{/}" class="btn btn-outline-secondary">
-                                    <i class="bi  me-1"></i>Back to Search
+                            <div >
+                                <a th:href="@{/}" >
+                                    <i ></i>Back to Search
                                 </a>
-                                <button type="submit" class="btn btn-success btn-lg">
-                                    <i class="bi me-1"></i>Confirm Booking
+                                <button type="submit" >
+                                    <i ></i>Confirm Booking
                                 </button>
                             </div>
                         </form>
@@ -176,7 +173,6 @@
         </div>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

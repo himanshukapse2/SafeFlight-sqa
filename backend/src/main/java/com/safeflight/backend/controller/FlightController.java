@@ -14,29 +14,38 @@ import com.safeflight.backend.service.FlightService;
 
 @Controller
 public class FlightController {
+	// Service for flight search and retrieval operations
 	private final FlightService flightService;
 
-    public FlightController(FlightService flightService) {
-        this.flightService = flightService;
-    }
+	// Constructor to inject FlightService dependency
+	public FlightController(FlightService flightService) {
+		this.flightService = flightService;
+	}
 
-    @GetMapping("/")
-    public String searchPage() {
-        return "search";
-    }
+	// Display the main flight search page
+	@GetMapping("/")
+	public String searchPage() {
+		// Return search form page
+		return "search";
+	}
 
-    @GetMapping("/flights/search")
-    public String searchFlights(
-            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam("fromCity") String fromCity,
-            @RequestParam("toCity") String toCity,
-            Model model) {
+	// Search flights based on date, departure city, and destination city
+	@GetMapping("/flights/search")
+	public String searchFlights(
+			@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+			@RequestParam("fromCity") String fromCity,
+			@RequestParam("toCity") String toCity,
+			Model model) {
 
-        List<Flight> flights = flightService.searchFlights(date, fromCity, toCity);
-        model.addAttribute("flights", flights);
-        model.addAttribute("searchDate", date);
-        model.addAttribute("fromCity", fromCity);
-        model.addAttribute("toCity", toCity);
-        return "search-results";
-    }
+		// Query database for matching flights
+		List<Flight> flights = flightService.searchFlights(date, fromCity, toCity);
+		// Add search results to model
+		model.addAttribute("flights", flights);
+		// Add search parameters for display on results page
+		model.addAttribute("searchDate", date);
+		model.addAttribute("fromCity", fromCity);
+		model.addAttribute("toCity", toCity);
+		// Return results page
+		return "search-results";
+	}
 }

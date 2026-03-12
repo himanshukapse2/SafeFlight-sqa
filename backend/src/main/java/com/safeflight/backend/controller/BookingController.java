@@ -25,15 +25,21 @@ import com.safeflight.backend.service.UserService;
 
 import jakarta.validation.Valid;
 
+// Handles all booking-related operations: creating bookings, viewing bookings, and cancellations
 @Controller
 @RequestMapping("/bookings")
 public class BookingController {
 
+    // Service for managing booking operations
     private final BookingService bookingService;
+    // Service for retrieving flight information
     private final FlightService flightService;
+    // Service for calculating fares and prices
     private final FareService fareService;
+    // Service for user-related operations
     private final UserService userService;
 
+    // Constructor to inject all required services
     public BookingController(BookingService bookingService, FlightService flightService, FareService fareService,
             UserService userService) {
         this.bookingService = bookingService;
@@ -42,15 +48,21 @@ public class BookingController {
         this.userService = userService;
     }
 
+    // Display booking form with flight details and discount options
     @GetMapping("/book/{flightId}")
     public String bookingForm(@PathVariable Long flightId, Model model) {
+        // Fetch flight details from database
         Flight flight = flightService.getFlightById(flightId);
+        // Add flight info to model for display
         model.addAttribute("flight", flight);
+        // Create empty booking form DTO
         model.addAttribute("bookingRequest", new BookingRequestDto());
+        // Add discount type options to dropdown
         model.addAttribute("discountTypes", DiscountType.values());
         return "book";
     }
 
+    // Process booking submission with validation and fare calculation
     @PostMapping("/book/{flightId}")
     public String createBooking(@PathVariable Long flightId,
             @Valid @ModelAttribute("bookingRequest") BookingRequestDto dto,
@@ -58,27 +70,34 @@ public class BookingController {
             Authentication auth,
             Model model,
             RedirectAttributes redirectAttributes) {
+        // Get flight details
         Flight flight = flightService.getFlightById(flightId);
 
+        // Return to form if validation fails
         if (result.hasErrors()) {
             model.addAttribute("flight", flight);
             model.addAttribute("discountTypes", DiscountType.values());
             return "book";
         }
 
+        // Get currently logged-in user
         User user = userService.findByEmail(auth.getName());
 
         try {
+            // Save the booking to database
             Booking booking = bookingService.createBooking(user, flight, dto);
 
-            // Build fare breakdown for confirmation
+            // Calculate total fare
             FareBreakdownDto fare = fareService.calculateFare(flight, dto.getExtraBaggage(), dto.getDiscountType());
+            // Pass booking confirmation details via redirect
             redirectAttributes.addFlashAttribute("booking", booking);
             redirectAttributes.addFlashAttribute("fareBreakdown", fare);
             redirectAttributes.addFlashAttribute("successMessage", "Flight booked successfully!");
 
+            // Redirect to user's bookings list
             return "redirect:/bookings/my";
         } catch (Exception e) {
+            // Show error message if booking fails
             model.addAttribute("flight", flight);
             model.addAttribute("discountTypes", DiscountType.values());
             model.addAttribute("errorMessage", e.getMessage());
@@ -86,41 +105,64 @@ public class BookingController {
         }
     }
 
+    // Display user's upcoming and past bookings
     @GetMapping("/my")
     public String myBookings(Authentication auth, Model model) {
+
+        // Get logged-in user
         User user = userService.findByEmail(auth.getName());
+
+        // Fetch future bookings (not yet departed)
         List<Booking> upcoming = bookingService.getUpcomingBookings(user);
+
+        // Fetch completed and cancelled bookings
         List<Booking> past = bookingService.getPastBookings(user);
+
+        // Add both lists to model
         model.addAttribute("upcomingBookings", upcoming);
         model.addAttribute("pastBookings", past);
         return "my-bookings";
     }
 
-    @GetMapping("/cancel/{bookingId}")
-    public String cancelConfirm(@PathVariable Long bookingId, Authentication auth, Model model) {
-        User user = userService.findByEmail(auth.getName());
-        Booking booking = bookingService.getBookingById(bookingId);
+	// Display cancellation confirmation page with refund details
+	@GetMapping("/cancel/{bookingId}")
+	public String cancelConfirm(@PathVariable Long bookingId, Authentication auth, Model model) {
+		// Get currently logged-in user
+		User user = userService.findByEmail(auth.getName());
 
-        if (booking == null || booking.getUser() == null || user == null ||
-        	    !java.util.Objects.equals(booking.getUser().getId(), user.getId())) {
-        	    throw new IllegalArgumentException("You can only cancel your own bookings");
-        	}
+        // Retrieve booking details
+		Booking booking = bookingService.getBookingById(bookingId);
+		// Verify user owns this booking
+		if (booking == null || booking.getUser() == null || user == null ||
+				!java.util.Objects.equals(booking.getUser().getId(), user.getId())) {
+			throw new IllegalArgumentException("You can only cancel your own bookings");
+		}
 
-        String refundInfo = bookingService.getRefundInfo(booking);
-        model.addAttribute("booking", booking);
-        model.addAttribute("refundInfo", refundInfo);
-        return "cancel-confirm";
-    }
+		// Get refund amount based on cancellation policy
+		String refundInfo = bookingService.getRefundInfo(booking);
+		// Add details for confirmation page
+		model.addAttribute("booking", booking);
+		model.addAttribute("refundInfo", refundInfo);
+		return "cancel-confirm";
+	}
 
-    @PostMapping("/cancel/{bookingId}")
-    public String cancelBooking(@PathVariable Long bookingId,
-            Authentication auth,
-            RedirectAttributes redirectAttributes) {
-        User user = userService.findByEmail(auth.getName());
-        Booking cancelled = bookingService.cancelBooking(bookingId, user);
-        redirectAttributes.addFlashAttribute("successMessage",
-                String.format("Booking #%d cancelled. Refund: ₹%.2f", cancelled.getId(),
-                        cancelled.getRefundAmount() != null ? cancelled.getRefundAmount() : 0.0));
-        return "redirect:/bookings/my";
-    }
+	// Process booking cancellation and update seat availability
+	@PostMapping("/cancel/{bookingId}")
+	public String cancelBooking(@PathVariable Long bookingId,
+			Authentication auth,
+			RedirectAttributes redirectAttributes) {
+		// Get logged-in user
+		User user = userService.findByEmail(auth.getName());
+
+        // Cancel booking and get refund amount
+		Booking cancelled = bookingService.cancelBooking(bookingId, user);
+
+        // Show success message with refund details
+		redirectAttributes.addFlashAttribute("successMessage",
+				String.format("Booking #%d cancelled. Refund: €%.2f", cancelled.getId(),
+						cancelled.getRefundAmount() != null ? cancelled.getRefundAmount() : 0.0));
+
+        // Return to bookings list
+		return "redirect:/bookings/my";
+	}
 }

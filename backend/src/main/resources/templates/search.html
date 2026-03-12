@@ -5,40 +5,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Flights | SafeFlight</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold" >
-                <i class="bi  me-2"></i>SafeFlight
+    <nav >
+        <div >
+            <a  >
+                SafeFlight
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+
+            <button type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" th:href="@{/}"><i class="bi  me-1"></i>Search Flights</a>
+
+            <div id="navbarNav">
+                <ul>
+                    <li>
+                        <a th:href="@{/}">Search Flights</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/bookings/my}"><i class="bi me-1"></i>My
-                            Bookings</a>
+                    <li>
+                        <a th:href="@{/bookings/my}">My Bookings</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <span class="nav-link text-light">
-                            <i class="bi  me-1"></i>
+
+                <ul>
+                    <li>
+                        <span>
                             <span sec:authentication="principal.username">User</span>
                         </span>
                     </li>
-                    <li class="nav-item">
-                        <form th:action="@{/logout}" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-outline-light btn-sm ms-2">
-                                <i class="bi  me-1"></i>Logout
+                    <li>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit">
+                                Logout
                             </button>
                         </form>
                     </li>
@@ -47,49 +47,51 @@
         </div>
     </nav>
 
-    <main class="container py-4">
-        <div class="hero-section text-center mb-5">
-            <h1 class="display-5 fw-bold text-primary"><i class="bi  me-2"></i>Find Your Perfect Flight
-            </h1>
-            <p class="lead text-muted">Search from hundreds of flights across domestic and international routes</p>
+    <main>
+
+        <div>
+            <h1>Find Your Perfect Flight</h1>
+            <p>Search from hundreds of flights across domestic and international routes</p>
         </div>
 
-		
-		
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="card shadow border-0">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="bi me-2"></i>Search Flights</h5>
+        <div>
+            <div>
+                <div>
+                    <div>
+                        <h5>Search Flights</h5>
                     </div>
-                    <div class="card-body p-4">
+
+                    <div>
                         <form action="/flights/search" method="get">
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <label for="fromCity" class="form-label fw-semibold">
-                                        <i class="bi  me-1"></i>From City
+                            <div>
+                                <div>
+                                    <label for="fromCity">
+                                        From City
                                     </label>
-                                    <input type="text" class="form-control form-control-lg" id="fromCity"
-                                        name="fromCity" placeholder="e.g. Delhi" required>
+                                    <input type="text" id="fromCity"
+                                        name="fromCity" placeholder="e.g.Delhi" required>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="toCity" class="form-label fw-semibold">
-                                        <i class="bi me-1"></i>To City
+
+                                <div>
+                                    <label for="toCity">
+                                        To City
                                     </label>
-                                    <input type="text" class="form-control form-control-lg" id="toCity" name="toCity"
-                                        placeholder="e.g. Mumbai" required>
+                                    <input type="text" id="toCity" name="toCity"
+                                        placeholder="e.g.Mumbai" required>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="date" class="form-label fw-semibold">
-                                        <i class="bi  me-1"></i>Travel Date
+
+                                <div>
+                                    <label for="date">
+                                        Travel Date
                                     </label>
-                                    <input type="date" class="form-control form-control-lg" id="date" name="date"
+                                    <input type="date" id="date" name="date"
                                         required>
                                 </div>
                             </div>
-                            <div class="text-center mt-4">
-                                <button type="submit" class="btn btn-primary btn-lg px-5">
-                                    <i class="bi  me-2"></i>Search Flights
+
+                            <div>
+                                <button type="submit">
+                                    Search Flights
                                 </button>
                             </div>
                         </form>
@@ -98,7 +100,8 @@
             </div>
         </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </main>
+
 </body>
 
 </html>

@@ -17,8 +17,8 @@ import com.safeflight.backend.model.Flight;
 import com.safeflight.backend.model.User;
 import com.safeflight.backend.repository.BookingRepo;
 import com.safeflight.backend.repository.FlightRepo;
-import com.safeflight.exception.ResourceNotFoundException;
-import com.safeflight.exception.SeatUnavailableException;
+import com.safeflight.backend.exception.ResourceNotFoundException;
+import com.safeflight.backend.exception.SeatUnavailableException;
 
 import jakarta.transaction.Transactional;
 

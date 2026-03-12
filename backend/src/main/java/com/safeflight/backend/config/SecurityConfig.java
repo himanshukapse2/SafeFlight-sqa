@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+// Adds the authentication when the user tries to access the protected resources
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {

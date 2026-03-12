@@ -1,5 +1,6 @@
 package com.safeflight.backend.model;
 
+//Enum representing DiscountType
 public enum DiscountType {
 	NONE("No Discount", 0),
     SENIOR("Senior Citizen (10%)", 10),

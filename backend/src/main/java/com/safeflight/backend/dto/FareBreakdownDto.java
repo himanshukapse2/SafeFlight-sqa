@@ -1,5 +1,6 @@
 package com.safeflight.backend.dto;
 
+// DTO for  providing the fare calculation
 public class FareBreakdownDto {
 	private Double baseFare;
     private Integer extraBaggage;

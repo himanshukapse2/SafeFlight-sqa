@@ -3,14 +3,18 @@ package com.safeflight.backend.config;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import com.safeflight.backend.model.Flight;
 import com.safeflight.backend.repository.FlightRepo;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+
+/*
+Loads dummy flight data into the database at application startup
+Configured in application.properties, the below command loads the data in local database when the application is run for the first time.
+spring.jpa.hibernate.ddl-auto=update
+*/
 @Configuration
 public class DataSeeder {
 

@@ -1,5 +1,5 @@
-## This file is generated using github copilot and is intended to provide a comprehensive guide for setting up the development environment for the application. It includes instructions for installing , configuring the database, running the application, and troubleshooting common issues. The guide is designed to help developers quickly get started with SafeFlight and ensure a smooth development experience.
-## This is just for dev environment setup and not part of submiision
+# This file is generated using github copilot and is intended to provide a comprehensive guide for setting up the development environment for the application. It includes instructions for installing , configuring the database, running the application, and troubleshooting common issues. The guide is designed to help developers quickly get started with SafeFlight and ensure a smooth development experience.
+# This is just for dev environment setup and not part of submission
 # SafeFlight Development Environment Setup Guide
 
 ## Overview

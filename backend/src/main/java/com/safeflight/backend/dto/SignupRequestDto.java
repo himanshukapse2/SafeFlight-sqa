@@ -2,9 +2,9 @@ package com.safeflight.backend.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+// DTO for handling user signup requests
 public class SignupRequestDto {
 	
 	@NotBlank(message = "Name is required")

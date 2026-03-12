@@ -1,12 +1,12 @@
 package com.safeflight.backend.dto;
 
 import com.safeflight.backend.model.DiscountType;
-
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+// DTO for handling flight booking requests
 public class BookingRequestDto {
 	@NotBlank(message = "Passenger name is required")
     private String passengerName;

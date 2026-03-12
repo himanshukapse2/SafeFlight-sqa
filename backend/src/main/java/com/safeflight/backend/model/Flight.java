@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+//Entity class for Flights
 @Entity
 @Table(name = "flights")
 public class Flight {

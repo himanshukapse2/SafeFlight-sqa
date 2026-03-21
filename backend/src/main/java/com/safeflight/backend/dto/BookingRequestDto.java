@@ -21,18 +21,21 @@ public class BookingRequestDto {
     @Max(value = 50, message = "Extra baggage cannot exceed 50 kg")
     private Integer extraBaggage;
 
-    @NotNull(message = "Please select a discount type")
+
     private DiscountType discountType;
+
+    private Boolean military = Boolean.FALSE;
 
     public BookingRequestDto() {
     }
 
     public BookingRequestDto(String passengerName, Integer passengerAge, Integer extraBaggage,
-            DiscountType discountType) {
+            DiscountType discountType, Boolean military) {
         this.passengerName = passengerName;
         this.passengerAge = passengerAge;
         this.extraBaggage = extraBaggage;
         this.discountType = discountType;
+        this.military = military;
     }
 
     public String getPassengerName() {
@@ -65,5 +68,13 @@ public class BookingRequestDto {
 
     public void setDiscountType(DiscountType discountType) {
         this.discountType = discountType;
+    }
+
+    public Boolean getMilitary() {
+        return military;
+    }
+
+    public void setMilitary(Boolean military) {
+        this.military = military;
     }
 }

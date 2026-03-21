@@ -49,7 +49,6 @@ public class BookingController {
         Flight flight = flightService.getFlightById(flightId);
         model.addAttribute("flight", flight);
         model.addAttribute("bookingRequest", new BookingRequestDto());
-        // manual discount selection removed; server will determine discount type
         return "book";
     }
 
@@ -71,7 +70,6 @@ public class BookingController {
         User user = userService.findByEmail(auth.getName());
 
         try {
-            // Determine discount type server-side
             DiscountType appliedDiscount = DiscountType.NONE;
             if (dto.getMilitary() != null && dto.getMilitary()) {
                 appliedDiscount = DiscountType.MILITARY;

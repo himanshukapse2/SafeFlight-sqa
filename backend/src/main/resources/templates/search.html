@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -69,7 +69,8 @@
                                         From City
                                     </label>
                                     <input type="text" id="fromCity"
-                                        name="fromCity" placeholder="e.g.Delhi" required>
+                                        name="fromCity" placeholder="e.g. Delhi" th:value="${fromCity}"
+                                        required>
                                 </div>
 
                                 <div>
@@ -77,7 +78,8 @@
                                         To City
                                     </label>
                                     <input type="text" id="toCity" name="toCity"
-                                        placeholder="e.g.Mumbai" required>
+                                        placeholder="e.g. Mumbai" th:value="${toCity}"
+                                        required>
                                 </div>
 
                                 <div>
@@ -85,7 +87,14 @@
                                         Travel Date
                                     </label>
                                     <input type="date" id="date" name="date"
+                                        th:attr="min=${minDate}"
+                                        th:value="${dateValue}"
                                         required>
+
+                                    <!-- Inline server-side validation message -->
+                                    <div th:if="${dateError}" style="color: #b00020; margin-top: 0.5rem;">
+                                        <small th:text="${dateError}"></small>
+                                    </div>
                                 </div>
                             </div>
 

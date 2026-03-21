@@ -58,7 +58,7 @@
             </div>
 
             <a th:href="@{/}">
-                New earch
+                New search
             </a>
         </div>
 
@@ -100,12 +100,12 @@
                                     €<span th:text="${#numbers.formatDecimal(flight.basePrice/100,0,0)}">5000</span>
                                 </h4>
 
-                                <small th:text="${flight.availableSeats+' seats left'}">10seats</small>
+                                <small th:text="${flight.availableSeats+' seats left'}">10 seats</small>
                                 <br>
 
                                 <a th:href="@{/bookings/book/{id}(id=${flight.id})}"
+
                                     th:classappend="${flight.availableSeats <= 0 ? 'disabled' : ''}">
-                                    BookNow
                                 </a>
                             </div>
                         </div>

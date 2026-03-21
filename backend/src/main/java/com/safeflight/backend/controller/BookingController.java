@@ -49,7 +49,7 @@ public class BookingController {
         Flight flight = flightService.getFlightById(flightId);
         model.addAttribute("flight", flight);
         model.addAttribute("bookingRequest", new BookingRequestDto());
-        model.addAttribute("discountTypes", DiscountType.values());
+        // manual discount selection removed; server will determine discount type
         return "book";
     }
 
@@ -65,15 +65,27 @@ public class BookingController {
 
         if (result.hasErrors()) {
             model.addAttribute("flight", flight);
-            model.addAttribute("discountTypes", DiscountType.values());
             return "book";
         }
 
         User user = userService.findByEmail(auth.getName());
 
         try {
+            // Determine discount type server-side
+            DiscountType appliedDiscount = DiscountType.NONE;
+            if (dto.getMilitary() != null && dto.getMilitary()) {
+                appliedDiscount = DiscountType.MILITARY;
+            } else if (dto.getPassengerAge() != null) {
+                if (dto.getPassengerAge() <= 12) {
+                    appliedDiscount = DiscountType.CHILD;
+                } else if (dto.getPassengerAge() > 60) {
+                    appliedDiscount = DiscountType.SENIOR;
+                }
+            }
+            dto.setDiscountType(appliedDiscount);
+
+            FareBreakdownDto fare = fareService.calculateFare(flight, dto.getExtraBaggage(), appliedDiscount);
             Booking booking = bookingService.createBooking(user, flight, dto);
-            FareBreakdownDto fare = fareService.calculateFare(flight, dto.getExtraBaggage(), dto.getDiscountType());
             redirectAttributes.addFlashAttribute("booking", booking);
             redirectAttributes.addFlashAttribute("fareBreakdown", fare);
             redirectAttributes.addFlashAttribute("successMessage", "Flight booked successfully!");
@@ -81,7 +93,6 @@ public class BookingController {
             return "redirect:/bookings/my";
         } catch (Exception e) {
             model.addAttribute("flight", flight);
-            model.addAttribute("discountTypes", DiscountType.values());
             model.addAttribute("errorMessage", e.getMessage());
             return "book";
         }

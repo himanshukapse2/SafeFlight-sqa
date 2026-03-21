@@ -102,23 +102,23 @@
                         </div>
 
                         <div >
-                            <strong>Base Fare:</strong> ₹<span
-                                th:text="${booking.baseFare!=null?#numbers.formatDecimal(booking.baseFare,0,2):'-'}"></span>
+                            <strong>Base Fare:</strong> €<span
+                                th:text="${booking.baseFare!=null?#numbers.formatDecimal(booking.baseFare/100,0,2):'-'}"></span>
                         </div>
 
                         <div >
-                            <strong>Baggage:</strong> ₹<span
-                                th:text="${booking.baggageCharge!=null?#numbers.formatDecimal(booking.baggageCharge,0,2):'0.00'}"></span>
+                            <strong>Baggage:</strong> €<span
+                                th:text="${booking.baggageCharge!=null?#numbers.formatDecimal(booking.baggageCharge/100,0,2):'0.00'}"></span>
                         </div>
 
                         <div >
-                            <strong>Discount:</strong> -₹<span
-                                th:text="${booking.discountAmount!=null?#numbers.formatDecimal(booking.discountAmount,0,2):'0.00'}"></span>
+                            <strong>Discount:</strong> -€<span
+                                th:text="${booking.discountAmount!=null?#numbers.formatDecimal(booking.discountAmount/100,0,2):'0.00'}"></span>
                         </div>
 
                         <div >
-                            <strong>Tax:</strong> ₹<span
-                                th:text="${booking.taxAmount!=null?#numbers.formatDecimal(booking.taxAmount,0,2):'-'}"></span>
+                            <strong>Tax:</strong> €<span
+                                th:text="${booking.taxAmount!=null?#numbers.formatDecimal(booking.taxAmount/100,0,2):'-'}"></span>
                         </div>
 
                         <div >

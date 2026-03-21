@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -99,7 +99,7 @@
                         </ul>
 
                         <p ><strong>Tax: </strong>5% on subtotal</p>
-                        <p ><strong>Discounts: </strong>Senior Citizen 10%, Child 15%,Military20%</p>
+                        <p ><strong>Discounts: </strong>Senior Citizen 10%, Child 15%, Military 20%</p>
                     </div>
                 </div>
             </div>
@@ -145,16 +145,12 @@
                                 </div>
                             </div>
 
-                            <div >
-                                <label for="discountType" >Discount Category</label>
-                                <select  id="discountType" th:field="*{discountType}"
-                                    th:classappend="${#fields.hasErrors('discountType')} ? 'is-invalid'">
-                                    <option value="">-- Select --</option>
-                                    <option th:each="dt : ${discountTypes}" th:value="${dt}" th:text="${dt.label}">
-                                    </option>
-                                </select>
-                                <div  th:if="${#fields.hasErrors('discountType')}"
-                                    th:errors="*{discountType}"></div>
+                            <!-- Discount selection removed: server will determine child/senior discount based on age.
+                                 Provide military checkbox for military discount option -->
+                            <div>
+                                <label for="military">Military Personnel</label>
+                                <input type="checkbox" id="military" th:field="*{military}">
+                                <div th:if="${#fields.hasErrors('military')}" th:errors="*{military}"></div>
                             </div>
 
                             <hr>

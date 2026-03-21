@@ -20,7 +20,12 @@ public class FlightController {
 
 	// Display the main flight search page
 	@GetMapping("/")
-	public String searchPage() {
+	public String searchPage(Model model) {
+		// Provide today's date as the minimum selectable date for the date picker
+		model.addAttribute("minDate", LocalDate.now().toString());
+		// Ensure template has these attributes (may be empty) to avoid NPEs
+		model.addAttribute("dateValue", null);
+		model.addAttribute("dateError", null);
 		return "search";
 	}
 
@@ -31,6 +36,19 @@ public class FlightController {
 			@RequestParam("fromCity") String fromCity,
 			@RequestParam("toCity") String toCity,
 			Model model) {
+
+		// Server-side validation: do not allow searching for past dates
+		LocalDate today = LocalDate.now();
+		if (date.isBefore(today)) {
+			model.addAttribute("dateError", "Travel date cannot be in the past.");
+			// Preserve entered values so user doesn't have to re-type
+			model.addAttribute("dateValue", date.toString());
+			model.addAttribute("fromCity", fromCity);
+			model.addAttribute("toCity", toCity);
+			// ensure the template still has minDate
+			model.addAttribute("minDate", LocalDate.now().toString());
+			return "search";
+		}
 
 		List<Flight> flights = flightService.searchFlights(date, fromCity, toCity);
 		model.addAttribute("flights", flights);

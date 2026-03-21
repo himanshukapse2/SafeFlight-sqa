@@ -104,7 +104,7 @@
                                 <br>
 
                                 <a th:href="@{/bookings/book/{id}(id=${flight.id})}"
-                                    th:classappend="${flight.availableSeats<=0}?'disabled':'">
+                                    th:classappend="${flight.availableSeats <= 0 ? 'disabled' : ''}">
                                     BookNow
                                 </a>
                             </div>

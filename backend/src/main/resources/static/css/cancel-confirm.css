@@ -1,0 +1,227 @@
+:root {
+  --primary-brown: #7f6547bd;
+  --primary-brown-solid: #7f6547;
+  --white: #ffffff;
+  --text-dark: #2D2D2D;
+  --text-muted: #6b5c4e;
+  --shadow: rgba(107, 68, 35, 0.15);
+  --brown-dark: #6B4423;
+  --brown-mid: #8B5A3C;
+  --danger: #c0392b;
+  --danger-dark: #a93226;
+  --danger-bg: #fdf5f4;
+  --warning-bg: #fef9ec;
+  --warning-border: rgba(180, 120, 20, 0.2);
+  --warning-text: #7a5a00;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(180deg, #6B4423 0%, #8B5A3C 50%, #F5E6D3 100%);
+  min-height: 100vh;
+  color: var(--text-dark);
+}
+
+.sf-nav {
+  background: rgba(83, 49, 22, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  height: 62px;
+  display: flex;
+  align-items: center;
+  padding: 0 36px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.sf-nav-inner {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sf-nav-inner > a {
+  font-family: cursive;
+  font-size: 26px;
+  color: var(--white);
+  text-decoration: none;
+}
+
+#navbarNav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#navbarNav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#navbarNav ul li a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 7px;
+  transition: background 0.18s;
+  white-space: nowrap;
+  display: block;
+}
+#navbarNav ul li a:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--white);
+}
+
+#navbarNav ul li > span {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
+.main-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 50px 24px 70px;
+}
+
+.page-center > div {
+  width: 100%;
+}
+
+.glass-box {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 var(--shadow);
+  overflow: hidden;
+}
+
+.card-header {
+  background: linear-gradient(120deg, var(--brown-dark) 0%, var(--brown-mid) 100%);
+  padding: 15px 24px;
+}
+.card-header h5 {
+  margin: 0;
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.glass-box-body {
+  padding: 28px 28px 24px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+}
+tr { border-bottom: 1px solid rgba(127, 101, 71, 0.1); }
+tr:last-child { border-bottom: none; }
+
+th {
+  text-align: left;
+  padding: 10px 14px 10px 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+td {
+  padding: 10px 0;
+  font-size: 14px;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.refund-info {
+  background: var(--warning-bg);
+  border: 1px solid var(--warning-border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+}
+
+.refund-info strong {
+  color: var(--warning-text);
+  font-size: 13px;
+}
+
+.refund-info ul {
+  margin: 10px 0 0;
+  padding-left: 18px;
+}
+
+.refund-info ul li {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+
+.refund-info ul li strong {
+  color: var(--text-dark);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.form-actions > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-brown-solid);
+  border: 1.5px solid var(--primary-brown-solid);
+  text-decoration: none;
+  transition: background 0.18s;
+}
+
+.form-actions > a:hover {
+  background: rgba(127, 101, 71, 0.07);
+}
+
+.form-actions form { margin: 0; }
+
+.button-danger {
+  background-color: var(--danger);
+  color: var(--white);
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  transition: background-color 0.18s;
+}
+
+.button-danger:hover {
+  background-color: var(--danger-dark);
+}

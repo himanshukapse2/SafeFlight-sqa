@@ -5,17 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results | SafeFlight</title>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/search-results.css" />
 </head>
 
 <body>
-    <nav>
-        <div>
+    <nav class="sf-nav">
+        <div class="sf-nav-inner">
             <a th:href="@{/}">
                 SafeFlight
             </a>
 
-            <button type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="sf-nav-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span></span>
             </button>
 
@@ -41,80 +42,77 @@
         </div>
     </nav>
 
-    <main>
-        <div>
+    <main class="main-container">
+        <div class="results-header">
             <div>
-
-                <h3>
+                <h3 class="route-title">
                     <span th:text="${fromCity}">From</span>
+                    →
                     <span th:text="${toCity}">To</span>
                 </h3>
 
-                <p>
-                    <span th:text="${#temporals.format(searchDate,'EEEE,ddMMMyyy')}">Date</span>
+                <p class="route-meta">
+                    <span th:text="${#temporals.format(searchDate,'EEEE, dd MMM yyyy')}">Date</span>
                     &nbsp;|&nbsp;
                     <span th:text="${#lists.size(flights)+' flights found'}">0 flights</span>
                 </p>
             </div>
 
-            <a th:href="@{/}">
-                New earch
+            <a th:href="@{/}" class="button-ghost">
+                New Search
             </a>
         </div>
 
-        <div th:if="${#lists.isEmpty(flights)}">
+        <div th:if="${#lists.isEmpty(flights)}" class="empty-state">
             <h4>No flights found for this route and date</h4>
-            <a th:href="@{/}">Try Another Search</a>
+            <a th:href="@{/}" class="button">Try Another Search</a>
         </div>
 
-        <div th:unless="${#lists.isEmpty(flights)}">
+        <div th:unless="${#lists.isEmpty(flights)}" class="flights-list">
 
-            <div th:each="flight:${flights}">
-                <div>
-                    <div>
-                        <div>
+            <div th:each="flight:${flights}" class="flight-card">
+                <div class="glass-box">
+                    <div class="flight-row">
+                        <div class="flight-airline">
+                            <span th:text="${flight.airline}">Airline</span>
+                            <br>
+                            <small th:text="${flight.flightNumber}">FL001</small>
+                        </div>
 
-                            <div>
-                                <span th:text="${flight.airline}">Airline</span>
-                                <br>
-                                <small th:text="${flight.flightNumber}">FL001</small>
-                            </div>
+                        <div class="flight-time">
+                            <h5 th:text="${flight.departureTime}">10:00</h5>
+                            <small th:text="${flight.fromCity}">From</small>
+                        </div>
 
-                            <div>
-                                <h5 th:text="${flight.departureTime}">10:00</h5>
-                                <small th:text="${flight.fromCity}">From</small>
-                            </div>
+                        <div class="flight-type">
+                            <small
+                                th:text="${flight.domestic?'Domestic':'International'}">Type</small>
+                        </div>
 
-                            <div>
-                                <small
-                                    th:text="${flight.domestic?'Domestic':'International'}">Type</small>
-                            </div>
+                        <div class="flight-time">
+                            <h5 th:text="${flight.arrivalTime}">12:00</h5>
+                            <small th:text="${flight.toCity}">To</small>
+                        </div>
 
-                            <div>
-                                <h5 th:text="${flight.arrivalTime}">12:00</h5>
-                                <small th:text="${flight.toCity}">To</small>
-                            </div>
+                        <div class="flight-price">
+                            <h4>
+                                €<span th:text="${#numbers.formatDecimal(flight.basePrice/100,0,0)}">5000</span>
+                            </h4>
 
-                            <div>
-                                <h4>
-                                    €<span th:text="${#numbers.formatDecimal(flight.basePrice/100,0,0)}">5000</span>
-                                </h4>
+                            <small th:text="${flight.availableSeats+' seats left'}">10 seats</small>
+                            <br>
 
-                                <small th:text="${flight.availableSeats+' seats left'}">10seats</small>
-                                <br>
-
-                                <a th:href="@{/bookings/book/{id}(id=${flight.id})}"
-                                    th:classappend="${flight.availableSeats<=0}?'disabled':'">
-                                    BookNow
-                                </a>
-                            </div>
+                            <a th:href="@{/bookings/book/{id}(id=${flight.id})}"
+                                class="button"
+                                th:classappend="${flight.availableSeats <= 0 ? ' disabled' : ''}">
+                                Book Now
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-
 
 </body>
 

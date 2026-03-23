@@ -1,97 +1,90 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Flights | SafeFlight</title>
+    <link rel="stylesheet" href="/css/search.css" />
 
 </head>
 
 <body>
-    <nav >
-        <div >
-            <a  >
-                SafeFlight
-            </a>
-
-            <button type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span></span>
-            </button>
+     <div class="main-container">
+        <div class="glass-box">
 
             <div id="navbarNav">
-                <ul>
-                    <li>
-                        <a th:href="@{/}">Search Flights</a>
-                    </li>
-                    <li>
-                        <a th:href="@{/bookings/my}">My Bookings</a>
-                    </li>
-                </ul>
 
-                <ul>
-                    <li>
-                        <span>
-                            <span sec:authentication="principal.username">User</span>
-                        </span>
-                    </li>
-                    <li>
-                        <form th:action="@{/logout}" method="post">
-                            <button type="submit">
-                                Logout
+                <div id="text-1" >
+                    <span sec:authentication="principal.username">User</span>
+                </div>
+
+                <form th:action="@{/logout}" method="post">
+                            <button type="submit" id="logout-button">
+                                Log Out
                             </button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+                </form>
 
-    <main>
+            </div>
+
+            <div >
+                <h2 id="title">SafeFlight</h2>
+            </div>
+        
+            <div id="navlink">
+                        <a th:href="@{/}" style="color:#256fe6;text-decoration:none;font-weight:600;">Search Flights</a>  |  
+                        <a th:href="@{/bookings/my}" style="color:#256fe6;text-decoration:none;font-weight:600;">My Bookings</a>
+            </div>
 
         <div>
-            <h1>Find Your Perfect Flight</h1>
-            <p>Search from hundreds of flights across domestic and international routes</p>
+            <h1 id="text-3">Find Your Perfect Flight !</h1>
+            <p>Search from hundreds of flights across domestic and international routes.</p>
         </div>
 
         <div>
             <div>
                 <div>
-                    <div>
-                        <h5>Search Flights</h5>
-                    </div>
 
                     <div>
                         <form action="/flights/search" method="get">
                             <div>
                                 <div>
-                                    <label for="fromCity">
+                                    <label class="label" for="fromCity">
                                         From City
                                     </label>
                                     <input type="text" id="fromCity"
-                                        name="fromCity" placeholder="e.g.Delhi" required>
+                                        name="fromCity" placeholder="e.g. Delhi" th:value="${fromCity}"
+                                        required>
                                 </div>
 
                                 <div>
-                                    <label for="toCity">
+                                    <label class="label" for="toCity">
                                         To City
                                     </label>
                                     <input type="text" id="toCity" name="toCity"
-                                        placeholder="e.g.Mumbai" required>
+                                        placeholder="e.g. Mumbai" th:value="${toCity}"
+                                        required>
                                 </div>
 
                                 <div>
-                                    <label for="date">
+                                    <label class="label" for="date">
                                         Travel Date
                                     </label>
                                     <input type="date" id="date" name="date"
+                                        th:attr="min=${minDate}"
+                                        th:value="${dateValue}"
                                         required>
+
+                                    <!-- Inline server-side validation message -->
+                                    <div th:if="${dateError}" style="color: #b00020; margin-top: 0.5rem;">
+                                        <small th:text="${dateError}"></small>
+                                    </div>
                                 </div>
                             </div>
 
                             <div>
-                                <button type="submit">
-                                    Search Flights
+                                <button id="search-button" type="submit">
+                                    Search
                                 </button>
                             </div>
                         </form>
@@ -99,8 +92,8 @@
                 </div>
             </div>
         </div>
-
-    </main>
+        </div>
+    </div>
 
 </body>
 

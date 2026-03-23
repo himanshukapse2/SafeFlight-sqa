@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Flight | SafeFlight</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/book.css" />
 </head>
 
 <body>
-    <nav >
-        <div >
+    <nav class="sf-nav">
+        <div class="sf-nav-inner">
             <a  th:href="@{/}"><i ></i>SafeFlight</a>
             <div  id="navbarNav">
                 <ul >
@@ -33,12 +33,12 @@
         </div>
     </nav>
 
-    <main >
-        <div >
-            <div >
+    <main class="main-container">
+        <div class="book-grid">
+            <div class="left-col">
 
-                <div >
-                    <div >
+                <div class="glass-box">
+                    <div class="card-header">
                         <h5>Flight Details</h5>
                     </div>
 
@@ -86,8 +86,8 @@
                     </div>
                 </div>
 
-                <div >
-                    <div >
+                <div class="glass-box">
+                    <div class="card-header">
                         <h6 >Pricing Info</h6>
                     </div>
 
@@ -99,17 +99,17 @@
                         </ul>
 
                         <p ><strong>Tax: </strong>5% on subtotal</p>
-                        <p ><strong>Discounts: </strong>Senior Citizen 10%, Child 15%,Military20%</p>
+                        <p ><strong>Discounts: </strong>Senior Citizen 10%, Child 15%, Military 20%</p>
                     </div>
                 </div>
             </div>
-            <div >
-                <div >
-                    <div >
+            <div class="right-col">
+                <div class="glass-box">
+                    <div class="card-header">
                         <h5 ><i ></i>Passenger Details</h5>
                     </div>
-                    <div >
-                        <div th:if="${errorMessage}" >
+                    <div class="glass-box-body">
+                        <div th:if="${errorMessage}" class="error-message">
                             <i ></i><span th:text="${errorMessage}"></span>
                         </div>
 
@@ -124,7 +124,7 @@
                                     th:errors="*{passengerName}"></div>
                             </div>
 
-                            <div >
+                            <div class="input-row">
                                 <div >
                                     <label for="passengerAge" >Age</label>
                                     <input type="number"  id="passengerAge"
@@ -145,24 +145,18 @@
                                 </div>
                             </div>
 
-                            <div >
-                                <label for="discountType" >Discount Category</label>
-                                <select  id="discountType" th:field="*{discountType}"
-                                    th:classappend="${#fields.hasErrors('discountType')} ? 'is-invalid'">
-                                    <option value="">-- Select --</option>
-                                    <option th:each="dt : ${discountTypes}" th:value="${dt}" th:text="${dt.label}">
-                                    </option>
-                                </select>
-                                <div  th:if="${#fields.hasErrors('discountType')}"
-                                    th:errors="*{discountType}"></div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="military" th:field="*{military}">
+                                <label for="military">Military Personnel (20% discount)</label>
+                                <div th:if="${#fields.hasErrors('military')}" th:errors="*{military}"></div>
                             </div>
 
                             <hr>
-                            <div >
+                            <div class="form-actions">
                                 <a th:href="@{/}" >
                                     <i ></i>Back to Search
                                 </a>
-                                <button type="submit" >
+                                <button type="submit" class="button">
                                     <i ></i>Confirm Booking
                                 </button>
                             </div>

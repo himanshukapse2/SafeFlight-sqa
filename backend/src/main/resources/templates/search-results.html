@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -105,7 +105,12 @@
 
                                 <a th:href="@{/bookings/book/{id}(id=${flight.id})}"
 
-                                    th:classappend="${flight.availableSeats <= 0 ? 'disabled' : ''}">
+                                   th:classappend="${flight.availableSeats <= 0 ? ' disabled' : ''}"
+                                   th:attr="aria-disabled=${flight.availableSeats <= 0}"
+                                   class="btn btn-primary">
+                                    <i class="bi bi-ticket-fill"></i>
+                                    <span th:text="${flight.availableSeats <= 0 ? 'Sold Out' : 'Book'}">Book</span>
+
                                 </a>
                             </div>
                         </div>

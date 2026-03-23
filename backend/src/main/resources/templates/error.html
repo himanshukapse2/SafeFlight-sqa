@@ -5,17 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Error | SafeFlight</title>
-
+    <link rel="stylesheet" href="/css/error.css" />
 </head>
 
-<body >
-    <div >
-        <div >
+<body>
+    <div class="main-container">
+        <div class="glass-box">
 
-            <h3  th:text="${errorTitle?: 'Oops!'}">Error</h3>
-            <p  th:text=" ${errorMessage?:'Somethingwentwrong.Pleasetryagain.'}">Error description</p>
+            <h3 class="error-title" th:text="${errorTitle?: 'Oops!'}">Error</h3>
+            <p class="error-message" th:text="${errorMessage?:'Something went wrong. Please try again.'}">Error description</p>
 
-            <a th:href="@{/}" >
+            <a th:href="@{/}" class="button">
                 Back to Home
             </a>
         </div>

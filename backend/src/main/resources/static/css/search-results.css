@@ -1,0 +1,322 @@
+:root {
+  --primary-brown: #7f6547bd;
+  --primary-brown-solid: #7f6547;
+  --white: #ffffff;
+  --text-dark: #2D2D2D;
+  --text-muted: #6b5c4e;
+  --shadow: rgba(107, 68, 35, 0.15);
+  --brown-dark: #6B4423;
+  --brown-mid: #8B5A3C;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(180deg, #6B4423 0%, #8B5A3C 50%, #F5E6D3 100%);
+  min-height: 100vh;
+  color: var(--text-dark);
+}
+
+.sf-nav {
+  background: rgba(83, 49, 22, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  height: 62px;
+  display: flex;
+  align-items: center;
+  padding: 0 36px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.sf-nav-inner {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sf-nav-inner > a {
+  font-family: cursive;
+  font-size: 26px;
+  color: var(--white);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.sf-nav-toggle {
+  display: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.sf-nav-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--white);
+  position: relative;
+}
+
+.sf-nav-toggle span::before,
+.sf-nav-toggle span::after {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--white);
+  position: absolute;
+  left: 0;
+}
+
+.sf-nav-toggle span::before { top: -6px; }
+.sf-nav-toggle span::after  { top:  6px; }
+
+#navbarNav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#navbarNav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#navbarNav ul li a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 7px;
+  transition: background 0.18s;
+  white-space: nowrap;
+  display: block;
+}
+
+#navbarNav ul li a:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--white);
+}
+
+#navbarNav ul li > span {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
+#navbarNav ul li form { margin: 0; }
+#navbarNav ul li form button {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  padding: 7px 18px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.18s;
+}
+
+#navbarNav ul li form button:hover {
+  background: rgba(255, 255, 255, 0.22);
+  color: var(--white);
+}
+
+.main-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 24px 70px;
+}
+
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.route-title {
+  font-family: cursive;
+  font-size: 30px;
+  color: var(--white);
+  margin: 0 0 6px;
+}
+
+.route-meta {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+.button-ghost {
+  display: inline-block;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.18s;
+}
+
+.button-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.empty-state {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  padding: 48px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.empty-state h4 {
+  margin: 0 0 20px;
+  color: var(--text-dark);
+  font-size: 18px;
+}
+
+.flights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.glass-box {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 var(--shadow);
+  overflow: hidden;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+
+.glass-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px 0 rgba(107, 68, 35, 0.22);
+}
+
+.flight-row {
+  display: flex;
+  align-items: center;
+  padding: 20px 28px;
+  gap: 0;
+}
+
+.flight-airline {
+  flex: 1.5;
+  min-width: 120px;
+}
+
+.flight-airline span {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.flight-airline small {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.flight-time {
+  flex: 1;
+  text-align: center;
+  padding: 0 16px;
+  border-left: 1px solid rgba(127, 101, 71, 0.12);
+}
+
+.flight-time h5 {
+  margin: 0 0 3px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.flight-time small {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.flight-type {
+  flex: 0.8;
+  text-align: center;
+  padding: 0 16px;
+  border-left: 1px solid rgba(127, 101, 71, 0.12);
+}
+
+.flight-type small {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #e3f0fb;
+  color: #1565c0;
+}
+
+.flight-price {
+  flex: 1.2;
+  text-align: right;
+  padding-left: 20px;
+  border-left: 1px solid rgba(127, 101, 71, 0.12);
+}
+
+.flight-price h4 {
+  margin: 0 0 4px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--brown-dark);
+}
+
+.flight-price small {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.button {
+  display: inline-block;
+  background-color: var(--primary-brown);
+  color: var(--white);
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 8px;
+  transition: background-color 0.18s;
+}
+
+.button:hover { background-color: #764b26; }
+
+.button.disabled {
+  background-color: #ccc;
+  color: #888;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+

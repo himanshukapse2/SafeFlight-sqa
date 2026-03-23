@@ -5,14 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up | SafeFlight</title>
+    <link rel="stylesheet" href="/css/signup.css" />
 
 </head>
 
 <body >
-    <div >
-        <div >
+    <div class="main-container">
+        <div class="glass-box">
 
-            <div ><p>Join SafeFlight today</p>
+            <div >
+                <h2 id="title">SafeFlight</h2>
+            </div>
+
+            <div ><p id="text-3">Join SafeFlight Today!</p>
             </div>
 
             <div th:if="${errorMessage}"  role="alert">
@@ -22,7 +27,7 @@
             <form th:action="@{/signup}" method="post" th:object="${signupRequest}" name="signupForm" id="signupForm">
 
                 <div  style="margin-bottom:20px;">
-                    <label for="nameInput" >FullName</label>
+                    <label class="label" for="nameInput" >FullName</label>
                     <div >
                         <span ></span>
                         <input type="text"
@@ -40,7 +45,7 @@
 
 
                 <div  style="margin-bottom:20px;">
-                    <label for="emailInput" >Email Address</label>
+                    <label class="label" for="emailInput" >Email Address</label>
                     <div >
                         <span ></span>
                         <input type="email"
@@ -57,7 +62,7 @@
 
                 <div  style="margin-bottom:25px;">
 
-                    <label for="passwordInput" >Password</label>
+                    <label class="label" for="passwordInput" >Password</label>
                     <div >
                         <span ></span>
                         <input type="password"
@@ -70,22 +75,20 @@
                             minlength="6">
                     </div>
 
-                    <small  style="display:block;margin-top:5px;"> Minimum 6 characters required</small>
+                    <small  style="display:block;margin-top:5px;margin-left:6px"> Minimum 6 characters required</small>
                     <div  th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                 </div>
 
                 <button type="submit"
-                    
-                    id="submitBtn"
-                    style="padding:10px;font-weight:600;font-size:16px;margin-top:15px;">
-                    Create Account
+                    class="button">
+                    Sign Up
                 </button>
             </form>
 
-            <div>
+            <div id="text-2">
 
                 <span>Already have an account?</span>
-                <a th:href="@{/login}">SignIn</a>
+                <a th:href="@{/login}" style="color:#256fe6;text-decoration:none;font-weight:600;">Sign In.</a>
             </div>
 
         </div>

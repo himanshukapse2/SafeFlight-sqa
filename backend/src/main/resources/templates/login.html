@@ -5,21 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | SafeFlight</title>
+    <link rel="stylesheet" href="/css/login.css" />
 
 </head>
 
 <body >
-    <div >
-        <div >
+    <div class="main-container">
+        <div class="glass-box">
 
-            <div style="text-align:center;margin-bottom:30px;padding-bottom:15px;">
-                <h2 style="font-weight:bold;margin-top:0px;margin-bottom:5px;color:#333;">SafeFlight</h2>
-
-                <p style="color:#999;font-size:14px;margin:0;">Sign-in to your Account</p>
+            <div >
+                <h2 id="title">SafeFlight</h2>
             </div>
 
-            <div th:if="${param.logout}" >
-                <span>You have been logged out Successfully.</span>
+            <div id="text-1" th:if="${param.logout}" >
+                <span>You are logged out. Please sign in.</span>
             </div>
 
             <div th:if="${param.error}" >
@@ -33,7 +32,7 @@
             <form th:action="@{/login}" method="post">
 
                 <div  style="margin-bottom:20px;">
-                    <label for="username" >Email Address</label>
+                    <label class="label" for="username" >Email Address:</label>
                     <div >
                         <span ></span>
                         <input type="email"  id="username" name="username"
@@ -43,7 +42,7 @@
 
                 <div  style="margin-bottom:25px;">
 
-                    <label for="password" >Password</label>
+                    <label class="label" for="password" >Password:</label>
                     <div >
                         <span ></span>
                         <input type="password"  id="password" name="password"
@@ -52,15 +51,15 @@
                 </div>
 
                 <button type="submit" 
-                    style="padding:10px;font-weight:600;font-size:16px;margin-top:15px;">
-                    SignIn
+                    class="button">
+                    Sign In
                 </button>
             </form>
 
-            <div>
+            <div id="text-2">
 
                 <span >Don't have an account?</span>
-                <a th:href="@{/signup}" style="color:#007bff;text-decoration:none;font-weight:600;">SignUp</a>
+                <a th:href="@{/signup}" style="color:#256fe6;text-decoration:none;font-weight:600;">Sign up now.</a>
             </div>
 
         </div>

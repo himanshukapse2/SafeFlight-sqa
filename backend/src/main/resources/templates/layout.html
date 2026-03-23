@@ -6,26 +6,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${pageTitle!=null?pageTitle+' | SafeFlight':'SafeFlight — FlightBookingSystem'}">SafeFlight</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link th:href="@{/style/style.css}" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/layout.css" />
 </head>
 
 <body>
-    <nav  sec:authorize="isAuthenticated()">
-        <div >
+    <nav class="sf-nav" sec:authorize="isAuthenticated()">
+        <div class="sf-nav-inner">
             <a  th:href="@{/}">
                 SafeFlight
             </a>
 
-            <button  type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span ></span>
+            <button class="sf-nav-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span></span>
             </button>
 
             <div  id="navbarNav">
                 <ul >
                     <li >
-
                         <a  th:href="@{/}">Search Flights</a>
                     </li>
 
@@ -53,19 +51,16 @@
         </div>
     </nav>
 
-    <main >
+    <main class="main-container">
 
-        <div th:if="${successMessage}"  role="alert">
+        <div th:if="${successMessage}" class="alert-success" role="alert">
             <span th:text="${successMessage}"></span>
-
-            <button type="button"  data-bs-dismiss="alert"></button>
+            <button type="button" class="alert-close" data-bs-dismiss="alert"></button>
         </div>
 
-        <div th:if="${errorMessage}"  role="alert">
-
+        <div th:if="${errorMessage}" class="alert-error" role="alert">
             <span th:text="${errorMessage}"></span>
-
-            <button type="button"  data-bs-dismiss="alert"></button>
+            <button type="button" class="alert-close" data-bs-dismiss="alert"></button>
         </div>
 
         <div layout:fragment="content"></div>

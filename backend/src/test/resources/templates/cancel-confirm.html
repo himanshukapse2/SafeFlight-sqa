@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cancel Booking | SafeFlight</title>
+
+</head>
+
+<body>
+    <nav >
+        <div >
+            <a  th:href="@{/}">SafeFlight</a>
+
+            <div  id="navbarNav">
+                <ul >
+                    <li ><a  th:href="@{/}">Search Flights</a></li>
+                    <li ><a  th:href="@{/bookings/my}">My Bookings</a></li>
+                </ul>
+
+                <ul >
+                    <li >
+                        <span ><span
+                                sec:authentication="principal.username">User</span></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main >
+        <div >
+            <div >
+                <div >
+                    <div >
+                        <h5 >Cancel Booking Confirmation</h5>
+                    </div>
+
+                    <div >
+                        <table >
+                            <tr>
+                                <th  width="35%">Booking ID</th>
+                                <td >#<span th:text="${booking.id}"></span></td>
+                            </tr>
+
+                            <tr>
+                                <th >Flight</th>
+                                <td th:text="${booking.flight.flightNumber+' — '+booking.flight.airline}"></td>
+                            </tr>
+
+                            <tr>
+                                <th >Route</th>
+                                <td th:text="${booking.flight.fromCity+' → '+booking.flight.toCity}"></td>
+                            </tr>
+
+                            <tr>
+                                <th >Departure Date</th>
+                                <td th:text="${#temporals.format(booking.flight.departureDate,'ddMMMyyy')}"></td>
+                            </tr>
+
+                            <tr>
+                                <th >Passenger</th>
+                                <td th:text="${booking.passengerName}"></td>
+                            </tr>
+
+                            <tr>
+                                <th >Total Fare Paid</th>
+                                <td >€<span
+                                        th:text="${#numbers.formatDecimal(booking.totalFare/100,0,2)}"></span></td>
+                            </tr>
+
+                            <tr>
+                                <th >Refund Policy</th>
+                                <td>
+                                    <span th:text="${refundInfo}"></span>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div >
+                            <div >
+                                <strong>Refund Information:</strong>
+                                <ul >
+                                    <li><strong>7+ days </strong>before departure:90% refund</li>
+                                    <li><strong>3-6 days </strong>before departure:50% refund</li>
+                                    <li><strong>1-2 days </strong>before departure:25% refund</li>
+                                    <li><strong>Sameday </strong>:No refund</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div >
+
+                            <a th:href="@{/bookings/my}" >
+                                Go Back
+                            </a>
+
+                            <form th:action="@{/bookings/cancel/{id}(id=${booking.id})}" method="post">
+                                <button type="submit" >
+                                    Confirm Cancellation
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

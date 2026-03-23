@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cancel Booking | SafeFlight</title>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/cancel-confirm.css" />
 </head>
 
 <body>
-    <nav >
-        <div >
+    <nav class="sf-nav">
+        <div class="sf-nav-inner">
             <a  th:href="@{/}">SafeFlight</a>
 
             <div  id="navbarNav">
@@ -29,15 +30,15 @@
         </div>
     </nav>
 
-    <main >
-        <div >
-            <div >
-                <div >
-                    <div >
+    <main class="main-container">
+        <div class="page-center">
+            <div>
+                <div class="glass-box">
+                    <div class="card-header">
                         <h5 >Cancel Booking Confirmation</h5>
                     </div>
 
-                    <div >
+                    <div class="glass-box-body">
                         <table >
                             <tr>
                                 <th  width="35%">Booking ID</th>
@@ -78,7 +79,7 @@
                             </tr>
                         </table>
 
-                        <div >
+                        <div class="refund-info">
                             <div >
                                 <strong>Refund Information:</strong>
                                 <ul >
@@ -90,14 +91,14 @@
                             </div>
                         </div>
 
-                        <div >
+                        <div class="form-actions">
 
                             <a th:href="@{/bookings/my}" >
                                 Go Back
                             </a>
 
                             <form th:action="@{/bookings/cancel/{id}(id=${booking.id})}" method="post">
-                                <button type="submit" >
+                                <button type="submit" class="button-danger">
                                     Confirm Cancellation
                                 </button>
                             </form>

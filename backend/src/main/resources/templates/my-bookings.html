@@ -5,15 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Bookings | SafeFlight</title>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/my-bookings.css" />
 </head>
 
 <body>
-    <nav >
-        <div >
+    <nav class="sf-nav">
+        <div class="sf-nav-inner">
             <a  th:href="@{/}">SafeFlight</a>
 
-            <button  type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="sf-nav-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span ></span>
             </button>
 
@@ -40,63 +41,63 @@
         </div>
     </nav>
 
-    <main >
-        <div th:if="${successMessage}" >
+    <main class="main-container">
+        <div th:if="${successMessage}" class="alert-success" >
             <span th:text="${successMessage}"></span>
-            <button type="button"  data-bs-dismiss="alert"></button>
+            <button type="button" class="alert-close" data-bs-dismiss="alert"></button>
         </div>
 
-        <h3 >My Bookings</h3>
+        <h3 class="page-title">My Bookings</h3>
 
-        <div >
-            <h5 >
+        <div class="section">
+            <h5 class="section-title">
                 Upcoming and Confirmed Bookings
-                <span  th:text="${#lists.size(upcomingBookings)}">0</span>
+                <span class="badge" th:text="${#lists.size(upcomingBookings)}">0</span>
             </h5>
 
-            <div th:if="${#lists.isEmpty(upcomingBookings)}" >
+            <div th:if="${#lists.isEmpty(upcomingBookings)}" class="empty-state">
                 <p >No upcoming bookings</p>
-                <a th:href="@{/}" >Search Flights</a>
+                <a th:href="@{/}" class="button">Search Flights</a>
             </div>
 
-            <div th:each="booking:${upcomingBookings}" >
-                <div >
-                    <div >
+            <div th:each="booking:${upcomingBookings}" class="booking-card">
+                <div class="glass-box">
+                    <div class="booking-summary">
 
-                        <div >
-                            <h6 
+                        <div class="booking-flight">
+                            <h6
                                 th:text="${booking.flight.flightNumber+' — '+booking.flight.airline}"></h6>
-                            <small 
+                            <small
                                 th:text="${booking.flight.fromCity+' → '+booking.flight.toCity}"></small>
                         </div>
 
-                        <div >
-                            <small >Date</small><br>
-                            <span 
+                        <div class="booking-meta">
+                            <small>Date</small><br>
+                            <span
                                 th:text="${#temporals.format(booking.flight.departureDate,'ddMMMyyy')}"></span>
                         </div>
 
-                        <div >
-                            <small >Passenger</small><br>
+                        <div class="booking-meta">
+                            <small>Passenger</small><br>
                             <span th:text="${booking.passengerName}"></span>
                         </div>
 
-                        <div >
-                            <small >Total Fare</small><br>
-                            <span >€<span
+                        <div class="booking-meta">
+                            <small>Total Fare</small><br>
+                            <span class="fare">€<span
                                     th:text="${#numbers.formatDecimal(booking.totalFare/100,0,2)}"></span></span>
                         </div>
 
-                        <div >
+                        <div class="booking-action">
                             <a th:href="@{/bookings/cancel/{id}(id=${booking.id})}"
-                                >
+                                class="button-cancel">
                                 Cancel
                             </a>
                         </div>
                     </div>
 
-                    <div ></div>
-                    <div >
+                    <div class="booking-divider"></div>
+                    <div class="booking-details">
                         <div >
                             <strong>Booking ID:</strong> #<span th:text="${booking.id}"></span>
                         </div>
@@ -130,48 +131,48 @@
             </div>
         </div>
 
-        <div>
-            <h5 >
+        <div class="section">
+            <h5 class="section-title">
                 Past &amp; Cancelled Bookings
-                <span  th:text="${#lists.size(pastBookings)}">0</span>
+                <span class="badge" th:text="${#lists.size(pastBookings)}">0</span>
             </h5>
 
-            <div th:if="${#lists.isEmpty(pastBookings)}" >
+            <div th:if="${#lists.isEmpty(pastBookings)}" class="empty-state">
                 <p >No past bookings</p>
             </div>
 
-            <div th:each="booking: ${pastBookings}" >
-                <div >
-                    <div >
+            <div th:each="booking: ${pastBookings}" class="booking-card booking-card--past">
+                <div class="glass-box">
+                    <div class="booking-summary">
 
-                        <div >
-                            <h6 
+                        <div class="booking-flight">
+                            <h6
                                 th:text="${booking.flight.flightNumber+' — '+booking.flight.airline}"></h6>
-                            <small 
+                            <small
                                 th:text="${booking.flight.fromCity+' → '+booking.flight.toCity}"></small>
                         </div>
 
-                        <div >
-                            <small >Date</small><br>
+                        <div class="booking-meta">
+                            <small>Date</small><br>
                             <span th:text="${#temporals.format(booking.flight.departureDate,'ddMMMyyy')}"></span>
                         </div>
 
-                        <div >
-                            <small >Passenger</small><br>
+                        <div class="booking-meta">
+                            <small>Passenger</small><br>
                             <span th:text="${booking.passengerName}"></span>
                         </div>
 
-                        <div >
-                            <small >Status</small><br>
-                            <span 
+                        <div class="booking-meta">
+                            <small>Status</small><br>
+                            <span class="status-badge"
                                 th:text="${booking.status}"></span>
                         </div>
 
-                        <div >
-                            <small >Fare</small><br>
-                            <span >€<span
+                        <div class="booking-meta">
+                            <small>Fare</small><br>
+                            <span class="fare">€<span
                                     th:text="${#numbers.formatDecimal(booking.totalFare/100,0,2)}"></span></span>
-                            <div th:if="${booking.refundAmount!=null&&booking.refundAmount>0}" >
+                            <div th:if="${booking.refundAmount!=null&&booking.refundAmount>0}" class="refund-tag">
                                 <small >Refund: €<span
                                         th:text="${#numbers.formatDecimal(booking.refundAmount/100,0,2)}"></span></small>
                             </div>

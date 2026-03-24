@@ -56,7 +56,7 @@ class FlightControllerTest {
                         .param("fromCity", "Delhi")
                         .param("toCity", "Mumbai"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("search-results"));
+                .andExpect(view().name("search"));
     }
 
     @Test

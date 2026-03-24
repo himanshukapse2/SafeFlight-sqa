@@ -58,7 +58,8 @@ public class BookingRequestDto {
     }
 
     public void setExtraBaggage(Integer extraBaggage) {
-        this.extraBaggage = extraBaggage;
+        
+        this.extraBaggage = (extraBaggage == null) ? 0 : extraBaggage;
     }
 
     public DiscountType getDiscountType() {

@@ -2,6 +2,7 @@ package com.safeflight.backend.controller;
 
 import java.time.LocalDate;
 import java.util.List;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +37,14 @@ public class FlightController {
 			@RequestParam("fromCity") String fromCity,
 			@RequestParam("toCity") String toCity,
 			Model model) {
+
+        fromCity = (fromCity != null && !fromCity.isEmpty())
+                ? fromCity.substring(0, 1).toUpperCase() + fromCity.substring(1).toLowerCase()
+                : fromCity;
+
+        toCity = (toCity != null && !toCity.isEmpty())
+                ? toCity.substring(0, 1).toUpperCase() + toCity.substring(1).toLowerCase()
+                : toCity;
 
 		// Server-side validation: do not allow searching for past dates
 		LocalDate today = LocalDate.now();

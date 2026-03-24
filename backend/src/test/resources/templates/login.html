@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | SafeFlight</title>
+
+</head>
+
+<body >
+    <div >
+        <div >
+
+            <div style="text-align:center;margin-bottom:30px;padding-bottom:15px;">
+                <h2 style="font-weight:bold;margin-top:0px;margin-bottom:5px;color:#333;">SafeFlight</h2>
+
+                <p style="color:#999;font-size:14px;margin:0;">Sign-in to your Account</p>
+            </div>
+
+            <div th:if="${param.logout}" >
+                <span>You have been logged out Successfully.</span>
+            </div>
+
+            <div th:if="${param.error}" >
+                <span>Invalid email or Password.</span>
+            </div>
+
+            <div th:if="${successMessage}" >
+                <span th:text="${successMessage}"></span>
+            </div>
+
+            <form th:action="@{/login}" method="post">
+
+                <div  style="margin-bottom:20px;">
+                    <label for="username" >Email Address</label>
+                    <div >
+                        <span ></span>
+                        <input type="email"  id="username" name="username"
+                            placeholder="you@example.com" required autofocus>
+                    </div>
+                </div>
+
+                <div  style="margin-bottom:25px;">
+
+                    <label for="password" >Password</label>
+                    <div >
+                        <span ></span>
+                        <input type="password"  id="password" name="password"
+                            placeholder="Enteryourpassword" required>
+                    </div>
+                </div>
+
+                <button type="submit" 
+                    style="padding:10px;font-weight:600;font-size:16px;margin-top:15px;">
+                    SignIn
+                </button>
+            </form>
+
+            <div>
+
+                <span >Don't have an account?</span>
+                <a th:href="@{/signup}" style="color:#007bff;text-decoration:none;font-weight:600;">SignUp</a>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+
+</html>

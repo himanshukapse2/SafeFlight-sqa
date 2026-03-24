@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Flights | SafeFlight</title>
+
+</head>
+
+<body>
+    <nav >
+        <div >
+            <a  >
+                SafeFlight
+            </a>
+
+            <button type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span></span>
+            </button>
+
+            <div id="navbarNav">
+                <ul>
+                    <li>
+                        <a th:href="@{/}">Search Flights</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/bookings/my}">My Bookings</a>
+                    </li>
+                </ul>
+
+                <ul>
+                    <li>
+                        <span>
+                            <span sec:authentication="principal.username">User</span>
+                        </span>
+                    </li>
+                    <li>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+
+        <div>
+            <h1>Find Your Perfect Flight</h1>
+            <p>Search from hundreds of flights across domestic and international routes</p>
+        </div>
+
+        <div>
+            <div>
+                <div>
+                    <div>
+                        <h5>Search Flights</h5>
+                    </div>
+
+                    <div>
+                        <form action="/flights/search" method="get">
+                            <div>
+                                <div>
+                                    <label for="fromCity">
+                                        From City
+                                    </label>
+                                    <input type="text" id="fromCity"
+                                        name="fromCity" placeholder="e.g.Delhi" required>
+                                </div>
+
+                                <div>
+                                    <label for="toCity">
+                                        To City
+                                    </label>
+                                    <input type="text" id="toCity" name="toCity"
+                                        placeholder="e.g.Mumbai" required>
+                                </div>
+
+                                <div>
+                                    <label for="date">
+                                        Travel Date
+                                    </label>
+                                    <input type="date" id="date" name="date"
+                                        required>
+                                </div>
+                            </div>
+
+                            <div>
+                                <button type="submit">
+                                    Search Flights
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+
+</html>

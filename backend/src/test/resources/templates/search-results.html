@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results | SafeFlight</title>
+
+</head>
+
+<body>
+    <nav>
+        <div>
+            <a th:href="@{/}">
+                SafeFlight
+            </a>
+
+            <button type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span></span>
+            </button>
+
+            <div id="navbarNav">
+                <ul>
+                    <li><a th:href="@{/}">Search Flights</a></li>
+                    <li><a th:href="@{/bookings/my}">My Bookings</a></li>
+                </ul>
+
+                <ul>
+                    <li>
+                        <span><span
+                                sec:authentication="principal.username">User</span></span>
+                    </li>
+
+                    <li>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div>
+            <div>
+
+                <h3>
+                    <span th:text="${fromCity}">From</span>
+                    <span th:text="${toCity}">To</span>
+                </h3>
+
+                <p>
+                    <span th:text="${#temporals.format(searchDate,'EEEE,ddMMMyyy')}">Date</span>
+                    &nbsp;|&nbsp;
+                    <span th:text="${#lists.size(flights)+' flights found'}">0 flights</span>
+                </p>
+            </div>
+
+            <a th:href="@{/}">
+                New earch
+            </a>
+        </div>
+
+        <div th:if="${#lists.isEmpty(flights)}">
+            <h4>No flights found for this route and date</h4>
+            <a th:href="@{/}">Try Another Search</a>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(flights)}">
+
+            <div th:each="flight:${flights}">
+                <div>
+                    <div>
+                        <div>
+
+                            <div>
+                                <span th:text="${flight.airline}">Airline</span>
+                                <br>
+                                <small th:text="${flight.flightNumber}">FL001</small>
+                            </div>
+
+                            <div>
+                                <h5 th:text="${flight.departureTime}">10:00</h5>
+                                <small th:text="${flight.fromCity}">From</small>
+                            </div>
+
+                            <div>
+                                <small
+                                    th:text="${flight.domestic?'Domestic':'International'}">Type</small>
+                            </div>
+
+                            <div>
+                                <h5 th:text="${flight.arrivalTime}">12:00</h5>
+                                <small th:text="${flight.toCity}">To</small>
+                            </div>
+
+                            <div>
+                                <h4>
+                                    €<span th:text="${#numbers.formatDecimal(flight.basePrice/100,0,0)}">5000</span>
+                                </h4>
+
+                                <small th:text="${flight.availableSeats+' seats left'}">10seats</small>
+                                <br>
+
+                                <a th:href="@{/bookings/book/{id}(id=${flight.id})}"
+                                    th:classappend="${flight.availableSeats<=0}?'disabled':''">
+                                    BookNow
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+</body>
+
+</html>

@@ -31,7 +31,8 @@
         <sonar.organization>himanshukapse2</sonar.organization>
         <sonar.projectKey>himanshukapse2_SafeFlight-sqa</sonar.projectKey>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/**/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+
     </properties>
     <dependencies>
          <dependency>

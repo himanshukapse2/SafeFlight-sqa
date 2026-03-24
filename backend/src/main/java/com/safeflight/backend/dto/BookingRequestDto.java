@@ -16,10 +16,9 @@ public class BookingRequestDto {
     @Max(value = 120, message = "Age must be less than 120")
     private Integer passengerAge;
 
-    @NotNull(message = "Extra baggage is required")
     @Min(value = 0, message = "Extra baggage cannot be negative")
     @Max(value = 50, message = "Extra baggage cannot exceed 50 kg")
-    private Integer extraBaggage;
+    private Integer extraBaggage = 0;
 
 
     private DiscountType discountType;
@@ -59,7 +58,8 @@ public class BookingRequestDto {
     }
 
     public void setExtraBaggage(Integer extraBaggage) {
-        this.extraBaggage = extraBaggage;
+        
+        this.extraBaggage = (extraBaggage == null) ? 0 : extraBaggage;
     }
 
     public DiscountType getDiscountType() {

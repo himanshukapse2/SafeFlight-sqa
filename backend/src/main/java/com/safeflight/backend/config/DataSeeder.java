@@ -3,8 +3,10 @@ package com.safeflight.backend.config;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 import com.safeflight.backend.model.Flight;
 import com.safeflight.backend.repository.FlightRepo;
+import com.safeflight.backend.repository.BookingRepo;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -18,12 +20,21 @@ spring.jpa.hibernate.ddl-auto=update
 @Configuration
 public class DataSeeder {
 
+    @Value("${app.seed-data.force-reload:false}")
+    private boolean forceReload;
+
     @Bean
-    public CommandLineRunner loadDummyFlights(FlightRepo repo) {
+    public CommandLineRunner loadDummyFlights(FlightRepo flightRepo, BookingRepo bookingRepo) {
         return args -> {
-            if (repo.count() == 0) {
-                repo.saveAll(List.of(
-                		new Flight(null, "SK1001", "Aer lingus", "Dublin", "Cork", LocalDate.of(2026, 3, 10),
+            if (forceReload) {
+                System.out.println("Force reload is enabled. Clearing database...");
+                bookingRepo.deleteAll();
+                flightRepo.deleteAll();
+            }
+
+            if (flightRepo.count() == 0) {
+                flightRepo.saveAll(List.of(
+            		new Flight(null, "SK1001", "Aer lingus", "Dublin", "Cork", LocalDate.of(2026, 3, 10),
                                 LocalTime.of(6, 0), LocalTime.of(8, 15), 4500.0, 45, true),
                         new Flight(null, "SK1002", "Etihad", "Dublin", "Cork", LocalDate.of(2026, 3, 10),
                                 LocalTime.of(9, 30), LocalTime.of(11, 45), 3800.0, 30, true),
@@ -311,6 +322,8 @@ public class DataSeeder {
                     ));
 
                 System.out.println("Dummy flights successfully seeded into the database.");
+            } else {
+                System.out.println("Flights already exist. No seeding required.");
             }
         };
     }

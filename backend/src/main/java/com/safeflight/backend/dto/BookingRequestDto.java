@@ -21,6 +21,8 @@ public class BookingRequestDto {
     private Integer extraBaggage = 0;
 
 
+    private Long returnFlightId;
+
     private DiscountType discountType;
 
     private Boolean military = Boolean.FALSE;
@@ -60,6 +62,14 @@ public class BookingRequestDto {
     public void setExtraBaggage(Integer extraBaggage) {
         
         this.extraBaggage = (extraBaggage == null) ? 0 : extraBaggage;
+    }
+
+    public Long getReturnFlightId() {
+        return returnFlightId;
+    }
+
+    public void setReturnFlightId(Long returnFlightId) {
+        this.returnFlightId = returnFlightId;
     }
 
     public DiscountType getDiscountType() {

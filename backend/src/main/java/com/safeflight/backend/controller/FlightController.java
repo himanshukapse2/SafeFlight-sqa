@@ -34,6 +34,8 @@ public class FlightController {
 	@GetMapping("/flights/search")
 	public String searchFlights(
 			@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+			@RequestParam(value = "returnDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate returnDate,
+			@RequestParam(value = "tripType", defaultValue = "oneWay") String tripType,
 			@RequestParam("fromCity") String fromCity,
 			@RequestParam("toCity") String toCity,
 			Model model) {
@@ -52,9 +54,22 @@ public class FlightController {
 			model.addAttribute("dateError", "Travel date cannot be in the past.");
 			// Preserve entered values so user doesn't have to re-type
 			model.addAttribute("dateValue", date.toString());
+			model.addAttribute("tripType", tripType);
+			if(returnDate != null) model.addAttribute("returnDateValue", returnDate.toString());
 			model.addAttribute("fromCity", fromCity);
 			model.addAttribute("toCity", toCity);
 			// ensure the template still has minDate
+			model.addAttribute("minDate", LocalDate.now().toString());
+			return "search";
+		}
+
+		if ("roundTrip".equals(tripType) && returnDate != null && returnDate.isBefore(date)) {
+			model.addAttribute("dateError", "Return date cannot be before travel date.");
+			model.addAttribute("dateValue", date.toString());
+			model.addAttribute("tripType", tripType);
+			model.addAttribute("returnDateValue", returnDate.toString());
+			model.addAttribute("fromCity", fromCity);
+			model.addAttribute("toCity", toCity);
 			model.addAttribute("minDate", LocalDate.now().toString());
 			return "search";
 		}
@@ -64,6 +79,14 @@ public class FlightController {
 		model.addAttribute("searchDate", date);
 		model.addAttribute("fromCity", fromCity);
 		model.addAttribute("toCity", toCity);
+		model.addAttribute("tripType", tripType);
+
+		if ("roundTrip".equals(tripType) && returnDate != null) {
+			List<Flight> returnFlights = flightService.searchFlights(returnDate, toCity, fromCity);
+			model.addAttribute("returnFlights", returnFlights);
+			model.addAttribute("returnDate", returnDate);
+		}
+
 		return "search-results";
 	}
 }

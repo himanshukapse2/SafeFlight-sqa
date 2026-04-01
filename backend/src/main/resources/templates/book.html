@@ -86,7 +86,34 @@
                     </div>
                 </div>
 
-                <div class="glass-box">
+                <div th:if="${selectedReturnFlight != null}" class="glass-box" style="margin-top: 1.5rem;">
+                    <div class="card-header">
+                        <h5>Return Flight <span th:text="${selectedReturnFlight.flightNumber}"></span></h5>
+                    </div>
+
+                    <div>
+                        <table>
+                            <tr>
+                                <th>Route</th>
+                                <td th:text="${selectedReturnFlight.fromCity+' → '+selectedReturnFlight.toCity}"></td>
+                            </tr>
+                            <tr>
+                                <th>Date</th>
+                                <td th:text="${#temporals.format(selectedReturnFlight.departureDate,'ddMMMyyy')}"></td>
+                            </tr>
+                            <tr>
+                                <th>Time</th>
+                                <td th:text="${selectedReturnFlight.departureTime+' — '+selectedReturnFlight.arrivalTime}"></td>
+                            </tr>
+                            <tr>
+                                <th>Base Price</th>
+                                <td>€<span th:text="${#numbers.formatDecimal(selectedReturnFlight.basePrice/100,0,2)}"></span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="glass-box" style="margin-top: 1.5rem;">
                     <div class="card-header">
                         <h6 >Pricing Info</h6>
                     </div>
@@ -115,6 +142,9 @@
 
                         <form th:action="@{/bookings/book/{id}(id=${flight.id})}" method="post"
                             th:object="${bookingRequest}">
+
+                            <input type="hidden" th:field="*{returnFlightId}" />
+
                             <div >
                                 <label for="passengerName" >Passenger Name</label>
                                 <input type="text"  id="passengerName" th:field="*{passengerName}"

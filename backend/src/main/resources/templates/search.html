@@ -47,6 +47,14 @@
 
                     <div>
                         <form action="/flights/search" method="get">
+                            <div style="margin-bottom: 1.5rem; display: flex; gap: 1.5rem; align-items: center; justify-content: center;">
+                                <label style="font-weight: bold; cursor: pointer;">
+                                    <input type="radio" name="tripType" value="oneWay" th:checked="${tripType == null || tripType == 'oneWay'}" onclick="toggleReturnDate(false)" style="margin-right: 0.5rem;" required> One Way
+                                </label>
+                                <label style="font-weight: bold; cursor: pointer;">
+                                    <input type="radio" name="tripType" value="roundTrip" th:checked="${tripType == 'roundTrip'}" onclick="toggleReturnDate(true)" style="margin-right: 0.5rem;" required> Round Trip
+                                </label>
+                            </div>
                             <div>
                                 <div>
                                     <label class="label" for="fromCity">
@@ -80,6 +88,16 @@
                                         <small th:text="${dateError}"></small>
                                     </div>
                                 </div>
+
+                                <div>
+                                    <label class="label" for="returnDate">
+                                        Return Date
+                                    </label>
+                                    <input type="date" id="returnDate" name="returnDate"
+                                        th:attr="min=${minDate}"
+                                        th:value="${returnDateValue}"
+                                        th:disabled="${tripType == null || tripType == 'oneWay'}">
+                                </div>
                             </div>
 
                             <div>
@@ -95,6 +113,33 @@
         </div>
     </div>
 
+    <script>
+        function toggleReturnDate(show) {
+            const returnDateInput = document.getElementById('returnDate');
+            returnDateInput.disabled = !show;
+            if (show) {
+                returnDateInput.required = true;
+                // auto set min to outbound departure date if selected
+                const depDate = document.getElementById('date').value;
+                if (depDate) {
+                    returnDateInput.min = depDate;
+                }
+            } else {
+                returnDateInput.required = false;
+                returnDateInput.value = '';
+            }
+        }
+
+        document.getElementById('date').addEventListener('change', function(e) {
+             const returnDateInput = document.getElementById('returnDate');
+             if (e.target.value) {
+                 returnDateInput.min = e.target.value;
+                 if (returnDateInput.value && returnDateInput.value < e.target.value) {
+                     returnDateInput.value = e.target.value;
+                 }
+             }
+        });
+    </script>
 </body>
 
 </html>

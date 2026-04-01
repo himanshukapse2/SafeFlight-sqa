@@ -3,8 +3,10 @@ package com.safeflight.backend.config;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 import com.safeflight.backend.model.Flight;
 import com.safeflight.backend.repository.FlightRepo;
+import com.safeflight.backend.repository.BookingRepo;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -18,12 +20,21 @@ spring.jpa.hibernate.ddl-auto=update
 @Configuration
 public class DataSeeder {
 
+    @Value("${app.seed-data.force-reload:false}")
+    private boolean forceReload;
+
     @Bean
-    public CommandLineRunner loadDummyFlights(FlightRepo repo) {
+    public CommandLineRunner loadDummyFlights(FlightRepo flightRepo, BookingRepo bookingRepo) {
         return args -> {
-            if (repo.count() == 0) {
-                repo.saveAll(List.of(
-                		new Flight(null, "SK1001", "Aer lingus", "Dublin", "Cork", LocalDate.of(2026, 3, 10),
+            if (forceReload) {
+                System.out.println("Force reload is enabled. Clearing database...");
+                bookingRepo.deleteAll();
+                flightRepo.deleteAll();
+            }
+
+            if (flightRepo.count() == 0) {
+                flightRepo.saveAll(List.of(
+            		new Flight(null, "SK1001", "Aer lingus", "Dublin", "Cork", LocalDate.of(2026, 3, 10),
                                 LocalTime.of(6, 0), LocalTime.of(8, 15), 4500.0, 45, true),
                         new Flight(null, "SK1002", "Etihad", "Dublin", "Cork", LocalDate.of(2026, 3, 10),
                                 LocalTime.of(9, 30), LocalTime.of(11, 45), 3800.0, 30, true),
@@ -307,10 +318,34 @@ public class DataSeeder {
                         new Flight(null, "SK2799", "Singapore Airlines", "Chennai", "Singapore", LocalDate.of(2026, 6, 9),
                                 LocalTime.of(23, 15), LocalTime.of(3, 30), 24900.0, 17, false),
                         new Flight(null, "SK2800", "Etihad", "Cork", "Dubai", LocalDate.of(2026, 6, 9),
-                                LocalTime.of(21, 0), LocalTime.of(23, 45), 18900.0, 22, false)
+                                LocalTime.of(21, 0), LocalTime.of(23, 45), 18900.0, 22, false),
+                                
+                        // ===== Return flights for Dublin to Cork (Cork to Dublin, 5 days later) =====
+                        new Flight(null, "SK3001", "Aer lingus", "Cork", "Dublin", LocalDate.of(2026, 3, 15), LocalTime.of(7, 0), LocalTime.of(9, 15), 4600.0, 48, true),
+                        new Flight(null, "SK3002", "Etihad", "Cork", "Dublin", LocalDate.of(2026, 3, 15), LocalTime.of(10, 30), LocalTime.of(12, 45), 3900.0, 35, true),
+                        
+                        new Flight(null, "SK3003", "Aer lingus", "Cork", "Dublin", LocalDate.of(2026, 3, 16), LocalTime.of(7, 0), LocalTime.of(9, 15), 4650.0, 47, true),
+                        new Flight(null, "SK3004", "Etihad", "Cork", "Dublin", LocalDate.of(2026, 3, 16), LocalTime.of(10, 30), LocalTime.of(12, 45), 3920.0, 34, true),
+                        
+                        new Flight(null, "SK3005", "Aer lingus", "Cork", "Dublin", LocalDate.of(2026, 3, 17), LocalTime.of(7, 0), LocalTime.of(9, 15), 4680.0, 46, true),
+                        new Flight(null, "SK3006", "Etihad", "Cork", "Dublin", LocalDate.of(2026, 3, 17), LocalTime.of(10, 30), LocalTime.of(12, 45), 3940.0, 33, true),
+                        
+                        new Flight(null, "SK3007", "Aer lingus", "Cork", "Dublin", LocalDate.of(2026, 3, 18), LocalTime.of(7, 0), LocalTime.of(9, 15), 4680.0, 46, true),
+                        new Flight(null, "SK3008", "Etihad", "Cork", "Dublin", LocalDate.of(2026, 3, 18), LocalTime.of(10, 30), LocalTime.of(12, 45), 3940.0, 33, true),
+                        
+                        new Flight(null, "SK3009", "Aer lingus", "Cork", "Dublin", LocalDate.of(2026, 3, 28), LocalTime.of(7, 0), LocalTime.of(9, 15), 4680.0, 46, true),
+                        new Flight(null, "SK3010", "Etihad", "Cork", "Dublin", LocalDate.of(2026, 3, 28), LocalTime.of(10, 30), LocalTime.of(12, 45), 3940.0, 33, true),
+                        
+                        new Flight(null, "SK3011", "Aer lingus", "Cork", "Dublin", LocalDate.of(2026, 4, 7), LocalTime.of(7, 0), LocalTime.of(9, 15), 4680.0, 46, true),
+                        new Flight(null, "SK3012", "Etihad", "Cork", "Dublin", LocalDate.of(2026, 4, 7), LocalTime.of(10, 30), LocalTime.of(12, 45), 3940.0, 33, true),
+                        
+                        new Flight(null, "SK3013", "Aer lingus", "Cork", "Dublin", LocalDate.of(2026, 6, 14), LocalTime.of(7, 0), LocalTime.of(9, 15), 5090.0, 40, true),
+                        new Flight(null, "SK3014", "Etihad", "Cork", "Dublin", LocalDate.of(2026, 6, 14), LocalTime.of(10, 30), LocalTime.of(12, 45), 4290.0, 27, true)
                     ));
 
                 System.out.println("Dummy flights successfully seeded into the database.");
+            } else {
+                System.out.println("Flights already exist. No seeding required.");
             }
         };
     }

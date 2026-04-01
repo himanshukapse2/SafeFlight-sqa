@@ -24,4 +24,18 @@ public class FlightService {
 	public Flight getFlightById(Long id) {
         return flightRepo.findById(id).orElseThrow(() -> new RuntimeException("Flight not found"));
     }
+	
+	// Delete flight by id
+    public void deleteFlight(Long id) {
+        flightRepo.deleteById(id);
+    }
+    
+    // Find return flights (from destination back to origin, on or after departure date)
+    public List<Flight> getReturnFlights(String fromCity, String toCity, LocalDate minDate) {
+        return flightRepo.findAll().stream()
+                .filter(f -> f.getFromCity().equalsIgnoreCase(fromCity) 
+                          && f.getToCity().equalsIgnoreCase(toCity)
+                          && (f.getDepartureDate().isEqual(minDate) || f.getDepartureDate().isAfter(minDate)))
+                .toList();
+    }
 }

@@ -41,10 +41,17 @@
         </div>
     </nav>
 
+    <script>
+        function removeDiv() {
+            const div = document.getElementById("remove-div");
+            div.remove();
+        }
+    </script>
+
     <main class="main-container">
-        <div th:if="${successMessage}" class="alert-success" >
+        <div th:if="${successMessage}" class="alert-success" id="remove-div">
             <span th:text="${successMessage}"></span>
-            <button type="button" class="alert-close" data-bs-dismiss="alert"></button>
+            <button type="button" onclick="removeDiv()" class="alert-close" data-bs-dismiss="alert"></button>
         </div>
 
         <h3 class="page-title">My Bookings</h3>

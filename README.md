@@ -135,4 +135,12 @@ limited to GitHub Copilot, ChatGPT, or Claude Code or anyother) to generate, aut
 
 4.⁠ ⁠Academic Integrity: We understand that the use of unauthorized AI tools to generate content constitutes a breach of academic integrity and may result in penalties as outlined in the university's academic misconduct policy.
 
-Student Names and Signatures:
+Student Names :
+
+  Yang Fu \
+  Himanshu Kapse \
+  Shresha Lakshman \
+  Angad Singh Gurnam Singh \
+  Kartik Sharma \
+  Mohammad Umar
+

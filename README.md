@@ -114,9 +114,7 @@ In the My Flight page, you can review all the booked flights and cancelled fligh
 
 <img width="500" height="350" alt="Screenshot 2026-04-02 at 21 55 58" src="https://github.com/user-attachments/assets/694dea8d-39af-40b3-bfa4-05176042a624" />
 
-## Declaration
-
-Declaration of Authorship and AI Non-Usage
+## Declaration of Authorship and AI Non-Usage
 
 Course: CSC1137 – Software Process Quality
 

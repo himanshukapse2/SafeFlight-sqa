@@ -117,13 +117,22 @@ In the My Flight page, you can review all the booked flights and cancelled fligh
 ## Declaration
 
 Declaration of Authorship and AI Non-Usage
+
 Course: CSC1137 – Software Process Quality
+
 Project Phase: 4
+
 Team Name: Group 5
+
 By submitting this project, we, the undersigned team members, hereby declare that:
+
 1.⁠ ⁠Original Work: The accompanying report and software source code are the original work of the team members listed below.
+
 2.⁠ ⁠No AI Text Generation: We have not used Large Language Models (LLMs) or AI-based text generation tools (including but not limited to ChatGPT, Claude, Gemini, Grok, Mistral, DeepSeek, or any other foundational model) to draft, write, or rewrite any portion of the project report, documentation, or presentation materials.
+
 3.⁠ ⁠No AI Code Generation: We have not used AI-based coding assistants (including but not
 limited to GitHub Copilot, ChatGPT, or Claude Code or anyother) to generate, autocomplete, or refactor any part of the source code submitted in this project.
+
 4.⁠ ⁠Academic Integrity: We understand that the use of unauthorized AI tools to generate content constitutes a breach of academic integrity and may result in penalties as outlined in the university's academic misconduct policy.
+
 Student Names and Signatures:

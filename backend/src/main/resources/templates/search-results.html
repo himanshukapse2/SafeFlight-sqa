@@ -43,9 +43,11 @@
     </nav>
 
     <main class="main-container">
+        <form th:action="@{/bookings/book}" method="get">
         <div class="results-header">
             <div>
                 <h3 class="route-title">
+                    <span th:text="${tripType == 'roundTrip' ? 'Outbound: ' : ''}"></span>
                     <span th:text="${fromCity}">From</span>
                     →
                     <span th:text="${toCity}">To</span>
@@ -53,7 +55,7 @@
 
                 <p class="route-meta">
                     <span th:text="${#temporals.format(searchDate,'EEEE, dd MMM yyyy')}">Date</span>
-                    &nbsp;|&nbsp;
+                    &nbsp;&nbsp;
                     <span th:text="${#lists.size(flights)+' flights found'}">0 flights</span>
                 </p>
             </div>
@@ -102,16 +104,89 @@
                             <small th:text="${flight.availableSeats+' seats left'}">10 seats</small>
                             <br>
 
-                            <a th:href="@{/bookings/book/{id}(id=${flight.id})}"
+                            <a th:if="${tripType != 'roundTrip'}" th:href="@{/bookings/book/{id}(id=${flight.id})}"
                                 class="button"
                                 th:classappend="${flight.availableSeats <= 0 ? ' disabled' : ''}">
                                 Book Now
                             </a>
+
+                            <label th:if="${tripType == 'roundTrip'}" class="button" th:classappend="${flight.availableSeats <= 0 ? ' disabled' : ''}" style="cursor:pointer;">
+                                <input type="radio" name="outboundFlightId" th:value="${flight.id}" th:disabled="${flight.availableSeats <= 0}" required style="margin-right:0.5rem">Select
+                            </label>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div th:if="${tripType == 'roundTrip'}">
+            <div class="results-header" style="margin-top: 3rem;">
+                <div>
+                    <h3 class="route-title">
+                        Return:
+                        <span th:text="${toCity}">From</span>
+                        →
+                        <span th:text="${fromCity}">To</span>
+                    </h3>
+
+                    <p class="route-meta">
+                        <span th:text="${#temporals.format(returnDate,'EEEE, dd MMM yyyy')}">Date</span>
+                        &nbsp;&nbsp;
+                        <span th:text="${#lists.size(returnFlights)+' flights found'}">0 flights</span>
+                    </p>
+                </div>
+            </div>
+
+            <div th:if="${#lists.isEmpty(returnFlights)}" class="empty-state">
+                <h4>No return flights found for this route and date</h4>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(returnFlights)}" class="flights-list">
+                <div th:each="flight:${returnFlights}" class="flight-card">
+                    <div class="glass-box">
+                        <div class="flight-row">
+                            <div class="flight-airline">
+                                <span th:text="${flight.airline}">Airline</span>
+                                <br>
+                                <small th:text="${flight.flightNumber}">FL001</small>
+                            </div>
+
+                            <div class="flight-time">
+                                <h5 th:text="${flight.departureTime}">10:00</h5>
+                                <small th:text="${flight.fromCity}">From</small>
+                            </div>
+
+                            <div class="flight-type">
+                                <small th:text="${flight.domestic?'Domestic':'International'}">Type</small>
+                            </div>
+
+                            <div class="flight-time">
+                                <h5 th:text="${flight.arrivalTime}">12:00</h5>
+                                <small th:text="${flight.toCity}">To</small>
+                            </div>
+
+                            <div class="flight-price">
+                                <h4>
+                                    €<span th:text="${#numbers.formatDecimal(flight.basePrice/100,0,0)}">5000</span>
+                                </h4>
+
+                                <small th:text="${flight.availableSeats+' seats left'}">10 seats</small>
+                                <br>
+
+                                <label class="button" th:classappend="${flight.availableSeats <= 0 ? ' disabled' : ''}" style="cursor:pointer;">
+                                    <input type="radio" name="returnFlightId" th:value="${flight.id}" th:disabled="${flight.availableSeats <= 0}" required style="margin-right:0.5rem">Select
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(flights) || #lists.isEmpty(returnFlights)}" style="text-align: center; margin-top: 3rem; margin-bottom: 2rem;">
+                <button type="submit" class="button" style="font-size: 1.25rem; padding: 1rem 2.5rem;">Proceed to Booking Details</button>
+            </div>
+        </div>
+        </form>
     </main>
 
 </body>

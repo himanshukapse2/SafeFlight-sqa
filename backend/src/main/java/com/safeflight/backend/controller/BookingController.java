@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.safeflight.backend.dto.BookingRequestDto;
 import com.safeflight.backend.dto.FareBreakdownDto;
@@ -51,6 +52,31 @@ public class BookingController {
         model.addAttribute("bookingRequest", new BookingRequestDto());
         return "book";
     }
+    
+    // Display booking form for round-trip via form submission
+    @GetMapping("/book")
+    public String bookingFormParams(
+            @RequestParam(name="outboundFlightId", required=false) Long outboundFlightId, 
+            @RequestParam(name="returnFlightId", required=false) Long returnFlightId, 
+            Model model) {
+        if (outboundFlightId == null) {
+            return "redirect:/"; // safety fallback
+        }
+        
+        Flight flight = flightService.getFlightById(outboundFlightId);
+        model.addAttribute("flight", flight);
+        
+        BookingRequestDto dto = new BookingRequestDto();
+        
+        if (returnFlightId != null) {
+            Flight returnFlight = flightService.getFlightById(returnFlightId);
+            model.addAttribute("selectedReturnFlight", returnFlight);
+            dto.setReturnFlightId(returnFlightId);
+        }
+        
+        model.addAttribute("bookingRequest", dto);
+        return "book";
+    }
 
     // Process booking submission with validation and fare calculation
     @PostMapping("/book/{flightId}")
@@ -64,6 +90,9 @@ public class BookingController {
 
         if (result.hasErrors()) {
             model.addAttribute("flight", flight);
+            if (dto.getReturnFlightId() != null) {
+                model.addAttribute("selectedReturnFlight", flightService.getFlightById(dto.getReturnFlightId()));
+            }
             return "book";
         }
 
@@ -84,13 +113,25 @@ public class BookingController {
 
             FareBreakdownDto fare = fareService.calculateFare(flight, dto.getExtraBaggage(), appliedDiscount);
             Booking booking = bookingService.createBooking(user, flight, dto);
+            
+            // Handle return flight booking
+            if (dto.getReturnFlightId() != null) {
+                Flight returnFlight = flightService.getFlightById(dto.getReturnFlightId());
+                Booking returnBooking = bookingService.createBooking(user, returnFlight, dto);
+                redirectAttributes.addFlashAttribute("successMessage", "Both Outbound and Return Flights booked successfully!");
+            } else {
+                redirectAttributes.addFlashAttribute("successMessage", "Flight booked successfully!");
+            }
+
             redirectAttributes.addFlashAttribute("booking", booking);
             redirectAttributes.addFlashAttribute("fareBreakdown", fare);
-            redirectAttributes.addFlashAttribute("successMessage", "Flight booked successfully!");
 
             return "redirect:/bookings/my";
         } catch (Exception e) {
             model.addAttribute("flight", flight);
+            if (dto.getReturnFlightId() != null) {
+                model.addAttribute("selectedReturnFlight", flightService.getFlightById(dto.getReturnFlightId()));
+            }
             model.addAttribute("errorMessage", e.getMessage());
             return "book";
         }

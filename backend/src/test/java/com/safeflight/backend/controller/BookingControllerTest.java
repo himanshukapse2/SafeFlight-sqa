@@ -255,4 +255,323 @@ class BookingControllerTest {
                 .andExpect(model().attributeDoesNotExist("selectedReturnFlight"));
     }
 
+    @Test
+    @WithMockUser(username = "test@example.com")
+    void createBooking_WithReturnFlight_ShouldBookBothFlightsAndRedirect() throws Exception {
+        User bookingUser = new User();
+        bookingUser.setId(1L);
+        bookingUser.setEmail("test@example.com");
+
+        Flight outboundFlight = new Flight();
+        outboundFlight.setId(1L);
+        outboundFlight.setAvailableSeats(10);
+        outboundFlight.setDomestic(true);
+        outboundFlight.setBasePrice(100.0);
+        outboundFlight.setFlightNumber("SF101");
+        outboundFlight.setFromCity("Dublin");
+        outboundFlight.setToCity("Cork");
+        outboundFlight.setDepartureDate(LocalDate.of(2026, 3, 10));
+        outboundFlight.setDepartureTime(LocalTime.of(10, 0));
+        outboundFlight.setArrivalTime(LocalTime.of(11, 0));
+
+        Flight returnFlight = new Flight();
+        returnFlight.setId(2L);
+        returnFlight.setAvailableSeats(8);
+        returnFlight.setDomestic(true);
+        returnFlight.setBasePrice(120.0);
+        returnFlight.setFlightNumber("SF102");
+        returnFlight.setFromCity("Cork");
+        returnFlight.setToCity("Dublin");
+        returnFlight.setDepartureDate(LocalDate.of(2026, 3, 15));
+        returnFlight.setDepartureTime(LocalTime.of(18, 0));
+        returnFlight.setArrivalTime(LocalTime.of(19, 0));
+
+        Booking createdBooking = new Booking();
+        createdBooking.setId(100L);
+
+        FareBreakdownDto fareBreakdown = new FareBreakdownDto();
+        fareBreakdown.setTotalFare(150.0);
+
+        when(userService.findByEmail("test@example.com")).thenReturn(bookingUser);
+        when(flightService.getFlightById(1L)).thenReturn(outboundFlight);
+        when(flightService.getFlightById(2L)).thenReturn(returnFlight);
+        when(fareService.calculateFare(any(), anyInt(), any())).thenReturn(fareBreakdown);
+        when(bookingService.createBooking(any(), any(), any())).thenReturn(createdBooking);
+
+        mockMvc.perform(post("/bookings/book/1")
+                        .with(csrf())
+                        .with(user("test@example.com"))
+                        .param("passengerName", "John Doe")
+                        .param("passengerAge", "25")
+                        .param("extraBaggage", "5")
+                        .param("returnFlightId", "2"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bookings/my"))
+                .andExpect(flash().attribute("successMessage",
+                        "Both Outbound and Return Flights booked successfully!"))
+                .andExpect(flash().attributeExists("booking"))
+                .andExpect(flash().attributeExists("fareBreakdown"));
+
+        org.mockito.Mockito.verify(bookingService, org.mockito.Mockito.times(2))
+                .createBooking(any(), any(), any());
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com")
+    void createBooking_WithMilitaryFlag_ShouldApplyMilitaryDiscount() throws Exception {
+        User bookingUser = new User();
+        bookingUser.setId(1L);
+        bookingUser.setEmail("test@example.com");
+
+        Flight bookingFlight = new Flight();
+        bookingFlight.setId(1L);
+        bookingFlight.setAvailableSeats(10);
+        bookingFlight.setDomestic(true);
+        bookingFlight.setBasePrice(100.0);
+
+        Booking createdBooking = new Booking();
+        createdBooking.setId(100L);
+
+        FareBreakdownDto fareBreakdown = new FareBreakdownDto();
+        fareBreakdown.setTotalFare(150.0);
+
+        when(userService.findByEmail("test@example.com")).thenReturn(bookingUser);
+        when(flightService.getFlightById(1L)).thenReturn(bookingFlight);
+        when(bookingService.createBooking(any(), any(), any())).thenReturn(createdBooking);
+        when(fareService.calculateFare(any(), anyInt(), any())).thenReturn(fareBreakdown);
+
+        mockMvc.perform(post("/bookings/book/1")
+                        .with(csrf())
+                        .with(user("test@example.com"))
+                        .param("passengerName", "John Doe")
+                        .param("passengerAge", "25")
+                        .param("extraBaggage", "5")
+                        .param("military", "true"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bookings/my"));
+
+        org.mockito.Mockito.verify(fareService)
+                .calculateFare(any(), anyInt(), org.mockito.ArgumentMatchers.eq(com.safeflight.backend.model.DiscountType.MILITARY));
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com")
+    void createBooking_WithChildAge_ShouldApplyChildDiscount() throws Exception {
+        User bookingUser = new User();
+        bookingUser.setId(1L);
+        bookingUser.setEmail("test@example.com");
+
+        Flight bookingFlight = new Flight();
+        bookingFlight.setId(1L);
+        bookingFlight.setAvailableSeats(10);
+        bookingFlight.setDomestic(true);
+        bookingFlight.setBasePrice(100.0);
+
+        Booking createdBooking = new Booking();
+        createdBooking.setId(100L);
+
+        FareBreakdownDto fareBreakdown = new FareBreakdownDto();
+        fareBreakdown.setTotalFare(150.0);
+
+        when(userService.findByEmail("test@example.com")).thenReturn(bookingUser);
+        when(flightService.getFlightById(1L)).thenReturn(bookingFlight);
+        when(bookingService.createBooking(any(), any(), any())).thenReturn(createdBooking);
+        when(fareService.calculateFare(any(), anyInt(), any())).thenReturn(fareBreakdown);
+
+        mockMvc.perform(post("/bookings/book/1")
+                        .with(csrf())
+                        .with(user("test@example.com"))
+                        .param("passengerName", "John Doe")
+                        .param("passengerAge", "10")
+                        .param("extraBaggage", "5"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bookings/my"));
+
+        org.mockito.Mockito.verify(fareService)
+                .calculateFare(any(), anyInt(), org.mockito.ArgumentMatchers.eq(com.safeflight.backend.model.DiscountType.CHILD));
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com")
+    void createBooking_WithSeniorAge_ShouldApplySeniorDiscount() throws Exception {
+        User bookingUser = new User();
+        bookingUser.setId(1L);
+        bookingUser.setEmail("test@example.com");
+
+        Flight bookingFlight = new Flight();
+        bookingFlight.setId(1L);
+        bookingFlight.setAvailableSeats(10);
+        bookingFlight.setDomestic(true);
+        bookingFlight.setBasePrice(100.0);
+
+        Booking createdBooking = new Booking();
+        createdBooking.setId(100L);
+
+        FareBreakdownDto fareBreakdown = new FareBreakdownDto();
+        fareBreakdown.setTotalFare(150.0);
+
+        when(userService.findByEmail("test@example.com")).thenReturn(bookingUser);
+        when(flightService.getFlightById(1L)).thenReturn(bookingFlight);
+        when(bookingService.createBooking(any(), any(), any())).thenReturn(createdBooking);
+        when(fareService.calculateFare(any(), anyInt(), any())).thenReturn(fareBreakdown);
+
+        mockMvc.perform(post("/bookings/book/1")
+                        .with(csrf())
+                        .with(user("test@example.com"))
+                        .param("passengerName", "John Doe")
+                        .param("passengerAge", "65")
+                        .param("extraBaggage", "5"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bookings/my"));
+
+        org.mockito.Mockito.verify(fareService)
+                .calculateFare(any(), anyInt(), org.mockito.ArgumentMatchers.eq(com.safeflight.backend.model.DiscountType.SENIOR));
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com")
+    void createBooking_WhenServiceThrowsException_ShouldReturnBookWithErrorMessage() throws Exception {
+        User bookingUser = new User();
+        bookingUser.setId(1L);
+        bookingUser.setEmail("test@example.com");
+
+        Flight bookingFlight = new Flight();
+        bookingFlight.setId(1L);
+        bookingFlight.setFlightNumber("SF101");
+        bookingFlight.setAirline("Aer Lingus");
+        bookingFlight.setFromCity("Dublin");
+        bookingFlight.setToCity("Cork");
+        bookingFlight.setDepartureDate(LocalDate.of(2026, 3, 10));
+        bookingFlight.setDepartureTime(LocalTime.of(10, 0));
+        bookingFlight.setArrivalTime(LocalTime.of(11, 0));
+        bookingFlight.setDomestic(true);
+        bookingFlight.setBasePrice(4500.0);
+        bookingFlight.setAvailableSeats(20);
+
+        FareBreakdownDto fareBreakdown = new FareBreakdownDto();
+        fareBreakdown.setTotalFare(150.0);
+
+        when(userService.findByEmail("test@example.com")).thenReturn(bookingUser);
+        when(flightService.getFlightById(1L)).thenReturn(bookingFlight);
+        when(fareService.calculateFare(any(), anyInt(), any())).thenReturn(fareBreakdown);
+        when(bookingService.createBooking(any(), any(), any()))
+                .thenThrow(new RuntimeException("Booking failed"));
+
+        mockMvc.perform(post("/bookings/book/1")
+                        .with(csrf())
+                        .with(user("test@example.com"))
+                        .param("passengerName", "John Doe")
+                        .param("passengerAge", "25")
+                        .param("extraBaggage", "5"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("book"))
+                .andExpect(model().attributeExists("flight"))
+                .andExpect(model().attribute("errorMessage", "Booking failed"));
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com")
+    void createBooking_WhenServiceThrowsExceptionWithReturnFlight_ShouldReturnBookWithSelectedReturnFlight() throws Exception {
+        User bookingUser = new User();
+        bookingUser.setId(1L);
+        bookingUser.setEmail("test@example.com");
+
+        Flight outboundFlight = new Flight();
+        outboundFlight.setId(1L);
+        outboundFlight.setFlightNumber("SF101");
+        outboundFlight.setAirline("Aer Lingus");
+        outboundFlight.setFromCity("Dublin");
+        outboundFlight.setToCity("Cork");
+        outboundFlight.setDepartureDate(LocalDate.of(2026, 3, 10));
+        outboundFlight.setDepartureTime(LocalTime.of(10, 0));
+        outboundFlight.setArrivalTime(LocalTime.of(11, 0));
+        outboundFlight.setDomestic(true);
+        outboundFlight.setBasePrice(4500.0);
+        outboundFlight.setAvailableSeats(20);
+
+        Flight returnFlight = new Flight();
+        returnFlight.setId(2L);
+        returnFlight.setFlightNumber("SF102");
+        returnFlight.setAirline("Etihad");
+        returnFlight.setFromCity("Cork");
+        returnFlight.setToCity("Dublin");
+        returnFlight.setDepartureDate(LocalDate.of(2026, 3, 15));
+        returnFlight.setDepartureTime(LocalTime.of(18, 0));
+        returnFlight.setArrivalTime(LocalTime.of(19, 0));
+        returnFlight.setDomestic(true);
+        returnFlight.setBasePrice(4700.0);
+        returnFlight.setAvailableSeats(18);
+
+        FareBreakdownDto fareBreakdown = new FareBreakdownDto();
+        fareBreakdown.setTotalFare(150.0);
+
+        when(userService.findByEmail("test@example.com")).thenReturn(bookingUser);
+        when(flightService.getFlightById(1L)).thenReturn(outboundFlight);
+        when(flightService.getFlightById(2L)).thenReturn(returnFlight);
+        when(fareService.calculateFare(any(), anyInt(), any())).thenReturn(fareBreakdown);
+        when(bookingService.createBooking(any(), any(), any()))
+                .thenThrow(new RuntimeException("Booking failed"));
+
+        mockMvc.perform(post("/bookings/book/1")
+                        .with(csrf())
+                        .with(user("test@example.com"))
+                        .param("passengerName", "John Doe")
+                        .param("passengerAge", "25")
+                        .param("extraBaggage", "5")
+                        .param("returnFlightId", "2"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("book"))
+                .andExpect(model().attributeExists("flight"))
+                .andExpect(model().attributeExists("selectedReturnFlight"))
+                .andExpect(model().attribute("errorMessage", "Booking failed"));
+    }
+
+    @Test
+    @WithMockUser(username = "user@test.com")
+    void bookingFormParams_WithOutboundAndReturnFlight_ShouldReturnBookViewWithSelectedReturnFlight() throws Exception {
+        Flight outboundFlight = new Flight();
+        outboundFlight.setId(1L);
+        outboundFlight.setFlightNumber("SF101");
+        outboundFlight.setAirline("Aer Lingus");
+        outboundFlight.setFromCity("Dublin");
+        outboundFlight.setToCity("Cork");
+        outboundFlight.setDepartureDate(LocalDate.of(2026, 3, 10));
+        outboundFlight.setDepartureTime(LocalTime.of(10, 0));
+        outboundFlight.setArrivalTime(LocalTime.of(11, 0));
+        outboundFlight.setDomestic(true);
+        outboundFlight.setBasePrice(4500.0);
+        outboundFlight.setAvailableSeats(20);
+
+        Flight returnFlight = new Flight();
+        returnFlight.setId(2L);
+        returnFlight.setFlightNumber("SF102");
+        returnFlight.setAirline("Etihad");
+        returnFlight.setFromCity("Cork");
+        returnFlight.setToCity("Dublin");
+        returnFlight.setDepartureDate(LocalDate.of(2026, 3, 15));
+        returnFlight.setDepartureTime(LocalTime.of(18, 0));
+        returnFlight.setArrivalTime(LocalTime.of(19, 0));
+        returnFlight.setDomestic(true);
+        returnFlight.setBasePrice(4700.0);
+        returnFlight.setAvailableSeats(18);
+
+        when(flightService.getFlightById(1L)).thenReturn(outboundFlight);
+        when(flightService.getFlightById(2L)).thenReturn(returnFlight);
+
+        mockMvc.perform(get("/bookings/book")
+                        .with(user("user@test.com"))
+                        .param("outboundFlightId", "1")
+                        .param("returnFlightId", "2"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("book"))
+                .andExpect(model().attributeExists("flight"))
+                .andExpect(model().attributeExists("selectedReturnFlight"))
+                .andExpect(model().attributeExists("bookingRequest"))
+                .andExpect(model().attribute("bookingRequest",
+                        org.hamcrest.Matchers.hasProperty("returnFlightId", org.hamcrest.Matchers.is(2L))));
+
+        org.mockito.Mockito.verify(flightService).getFlightById(1L);
+        org.mockito.Mockito.verify(flightService).getFlightById(2L);
+    }
+
 }

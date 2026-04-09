@@ -6,10 +6,17 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Set;
+import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+import org.junit.jupiter.params.provider.Arguments;
 
 class SignupRequestDtoTest {
 
@@ -33,64 +40,32 @@ class SignupRequestDtoTest {
         assertTrue(violations.isEmpty());
     }
 
-    @Test
-    void testBlankName_ShouldFailValidation() {
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("invalidSignupRequests")
+    void testInvalidDto_ShouldFailValidation(
+            String testName,
+            String name,
+            String email,
+            String password) {
+
         SignupRequestDto dto = new SignupRequestDto();
-        dto.setName("");
-        dto.setEmail("john@example.com");
-        dto.setPassword("secure123");
+        dto.setName(name);
+        dto.setEmail(email);
+        dto.setPassword(password);
 
         Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(dto);
 
         assertFalse(violations.isEmpty());
     }
 
-    @Test
-    void testInvalidEmail_ShouldFailValidation() {
-        SignupRequestDto dto = new SignupRequestDto();
-        dto.setName("John");
-        dto.setEmail("invalid-email"); // invalid
-        dto.setPassword("secure123");
-
-        Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(dto);
-
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    void testBlankEmail_ShouldFailValidation() {
-        SignupRequestDto dto = new SignupRequestDto();
-        dto.setName("John");
-        dto.setEmail("");
-        dto.setPassword("secure123");
-
-        Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(dto);
-
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    void testShortPassword_ShouldFailValidation() {
-        SignupRequestDto dto = new SignupRequestDto();
-        dto.setName("John");
-        dto.setEmail("john@example.com");
-        dto.setPassword("123"); // too short
-
-        Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(dto);
-
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    void testBlankPassword_ShouldFailValidation() {
-        SignupRequestDto dto = new SignupRequestDto();
-        dto.setName("John");
-        dto.setEmail("john@example.com");
-        dto.setPassword("");
-
-        Set<ConstraintViolation<SignupRequestDto>> violations = validator.validate(dto);
-
-        assertFalse(violations.isEmpty());
+    private static Stream<Arguments> invalidSignupRequests() {
+        return Stream.of(
+                arguments("Blank name", "", "john@example.com", "secure123"),
+                arguments("Invalid email", "John", "invalid-email", "secure123"),
+                arguments("Blank email", "John", "", "secure123"),
+                arguments("Short password", "John", "john@example.com", "123"),
+                arguments("Blank password", "John", "john@example.com", "")
+        );
     }
 
     @Test

@@ -5,6 +5,16 @@ on:
     branches: [ "master", "develop" ]
   pull_request:
     branches: [ "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pit-report-pages"
+  cancel-in-progress: true
 
 jobs:
   build-test-sonar:
@@ -27,20 +37,48 @@ jobs:
           java-version: '17'
           cache: maven
 
-      - name: Build and test
-        run: ./mvnw clean verify
+      - name: Build, test, and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./mvnw clean verify sonar:sonar -Dsonar.qualitygate.wait=false
 
       - name: Run mutation tests
         run: ./mvnw org.pitest:pitest-maven:mutationCoverage
 
-      - name: Upload PIT report
-        uses: actions/upload-artifact@v4
+      - name: Upload PIT artifact
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: pitest-report
           path: backend/target/pit-reports/
 
-      - name: Sonar analysis
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./mvnw sonar:sonar -Dsonar.qualitygate.wait=false
+      - name: Prepare Pages content
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        run: |
+          latest_report="$(find target/pit-reports -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)"
+          mkdir -p ../pages
+          cp -R "$latest_report"/. ../pages/
+          touch ../pages/.nojekyll
+
+      - name: Configure GitHub Pages
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages
+
+  deploy-pages:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+    needs: build-test-sonar
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

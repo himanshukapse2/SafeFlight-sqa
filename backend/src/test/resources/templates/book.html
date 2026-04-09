@@ -67,8 +67,7 @@
                             <tr>
                                 <th >Type</th>
                                 <td>
-                                    <span 
-                                        th:text="${flight.domestic?'Domestic':'International'}"></span>
+                                    <span th:text="${flight.domestic != null and flight.domestic ? 'Domestic' : 'International'}"></span>
                                 </td>
                             </tr>
 

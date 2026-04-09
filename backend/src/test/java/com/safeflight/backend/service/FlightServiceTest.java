@@ -10,14 +10,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class FlightServiceTest {
@@ -28,49 +24,175 @@ class FlightServiceTest {
     @InjectMocks
     private FlightService flightService;
 
-    private Flight mockFlight;
+    private Flight matchingFlightOnMinDate;
+    private Flight matchingFlightAfterMinDate;
+    private Flight wrongRouteFlight;
+    private Flight beforeMinDateFlight;
 
     @BeforeEach
     void setUp() {
-        mockFlight = new Flight();
-        mockFlight.setId(1L);
-        mockFlight.setFlightNumber("SF101");
-        mockFlight.setFromCity("Delhi");
-        mockFlight.setToCity("Mumbai");
-        mockFlight.setDepartureDate(LocalDate.now());
+        matchingFlightOnMinDate = new Flight();
+        matchingFlightOnMinDate.setId(1L);
+        matchingFlightOnMinDate.setFromCity("Cork");
+        matchingFlightOnMinDate.setToCity("Dublin");
+        matchingFlightOnMinDate.setDepartureDate(LocalDate.of(2026, 3, 10));
+
+        matchingFlightAfterMinDate = new Flight();
+        matchingFlightAfterMinDate.setId(2L);
+        matchingFlightAfterMinDate.setFromCity("Cork");
+        matchingFlightAfterMinDate.setToCity("Dublin");
+        matchingFlightAfterMinDate.setDepartureDate(LocalDate.of(2026, 3, 12));
+
+        wrongRouteFlight = new Flight();
+        wrongRouteFlight.setId(3L);
+        wrongRouteFlight.setFromCity("Dublin");
+        wrongRouteFlight.setToCity("Cork");
+        wrongRouteFlight.setDepartureDate(LocalDate.of(2026, 3, 10));
+
+        beforeMinDateFlight = new Flight();
+        beforeMinDateFlight.setId(4L);
+        beforeMinDateFlight.setFromCity("Cork");
+        beforeMinDateFlight.setToCity("Dublin");
+        beforeMinDateFlight.setDepartureDate(LocalDate.of(2026, 3, 8));
     }
 
     @Test
-    void searchFlights_ShouldReturnList() {
-        LocalDate date = LocalDate.now();
-        when(flightRepo.findByDepartureDateAndFromCityAndToCity(date, "Delhi", "Mumbai"))
-                .thenReturn(Arrays.asList(mockFlight));
+    void deleteFlight_ShouldCallDeleteById() {
+        Long flightId = 10L;
 
-        List<Flight> results = flightService.searchFlights(date, "Delhi", "Mumbai");
+        flightService.deleteFlight(flightId);
 
-        assertNotNull(results);
-        assertEquals(1, results.size());
-        assertEquals("SF101", results.get(0).getFlightNumber());
+        verify(flightRepo, times(1)).deleteById(flightId);
     }
 
     @Test
-    void getFlightById_ValidId_ShouldReturnFlight() {
-        when(flightRepo.findById(1L)).thenReturn(Optional.of(mockFlight));
+    void getReturnFlights_ShouldReturnFlightsMatchingRouteOnOrAfterMinDate() {
+        LocalDate minDate = LocalDate.of(2026, 3, 10);
+
+        when(flightRepo.findAll()).thenReturn(List.of(
+                matchingFlightOnMinDate,
+                matchingFlightAfterMinDate,
+                wrongRouteFlight,
+                beforeMinDateFlight
+        ));
+
+        List<Flight> result = flightService.getReturnFlights("Cork", "Dublin", minDate);
+
+        assertEquals(2, result.size());
+        assertTrue(result.contains(matchingFlightOnMinDate));
+        assertTrue(result.contains(matchingFlightAfterMinDate));
+        assertFalse(result.contains(wrongRouteFlight));
+        assertFalse(result.contains(beforeMinDateFlight));
+
+        verify(flightRepo, times(1)).findAll();
+    }
+
+    @Test
+    void getReturnFlights_ShouldBeCaseInsensitiveForCityNames() {
+        LocalDate minDate = LocalDate.of(2026, 3, 10);
+
+        when(flightRepo.findAll()).thenReturn(List.of(
+                matchingFlightOnMinDate,
+                matchingFlightAfterMinDate
+        ));
+
+        List<Flight> result = flightService.getReturnFlights("cOrK", "duBLin", minDate);
+
+        assertEquals(2, result.size());
+        assertTrue(result.contains(matchingFlightOnMinDate));
+        assertTrue(result.contains(matchingFlightAfterMinDate));
+    }
+
+    @Test
+    void getReturnFlights_ShouldReturnEmptyListWhenNoFlightsMatch() {
+        LocalDate minDate = LocalDate.of(2026, 3, 10);
+
+        when(flightRepo.findAll()).thenReturn(List.of(
+                wrongRouteFlight,
+                beforeMinDateFlight
+        ));
+
+        List<Flight> result = flightService.getReturnFlights("Cork", "Dublin", minDate);
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void getReturnFlights_ShouldIncludeFlightExactlyOnMinDate() {
+        LocalDate minDate = LocalDate.of(2026, 3, 10);
+
+        when(flightRepo.findAll()).thenReturn(List.of(matchingFlightOnMinDate));
+
+        List<Flight> result = flightService.getReturnFlights("Cork", "Dublin", minDate);
+
+        assertEquals(1, result.size());
+        assertEquals(matchingFlightOnMinDate, result.get(0));
+    }
+
+    @Test
+    void searchFlights_ShouldReturnMatchingFlights() {
+        LocalDate date = LocalDate.of(2026, 3, 10);
+
+        Flight flight1 = new Flight();
+        flight1.setId(1L);
+
+        Flight flight2 = new Flight();
+        flight2.setId(2L);
+
+        when(flightRepo.findByDepartureDateAndFromCityAndToCity(date, "Dublin", "Cork"))
+                .thenReturn(List.of(flight1, flight2));
+
+        List<Flight> result = flightService.searchFlights(date, "Dublin", "Cork");
+
+        assertEquals(2, result.size());
+        assertEquals(flight1, result.get(0));
+        assertEquals(flight2, result.get(1));
+
+        verify(flightRepo, times(1))
+                .findByDepartureDateAndFromCityAndToCity(date, "Dublin", "Cork");
+    }
+
+    @Test
+    void searchFlights_WhenNoFlightsFound_ShouldReturnEmptyList() {
+        LocalDate date = LocalDate.of(2026, 3, 10);
+
+        when(flightRepo.findByDepartureDateAndFromCityAndToCity(date, "Dublin", "Cork"))
+                .thenReturn(List.of());
+
+        List<Flight> result = flightService.searchFlights(date, "Dublin", "Cork");
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+
+        verify(flightRepo).findByDepartureDateAndFromCityAndToCity(date, "Dublin", "Cork");
+    }
+
+    @Test
+    void getFlightById_WhenFlightExists_ShouldReturnFlight() {
+        Flight flight = new Flight();
+        flight.setId(1L);
+
+        when(flightRepo.findById(1L)).thenReturn(java.util.Optional.of(flight));
 
         Flight result = flightService.getFlightById(1L);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
+
+        verify(flightRepo).findById(1L);
     }
 
     @Test
-    void getFlightById_InvalidId_ShouldThrowException() {
-        when(flightRepo.findById(99L)).thenReturn(Optional.empty());
+    void getFlightById_WhenFlightNotFound_ShouldThrowException() {
+        when(flightRepo.findById(1L)).thenReturn(java.util.Optional.empty());
 
-        Exception exception = assertThrows(RuntimeException.class, () ->
-                flightService.getFlightById(99L)
-        );
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            flightService.getFlightById(1L);
+        });
 
         assertEquals("Flight not found", exception.getMessage());
+
+        verify(flightRepo).findById(1L);
     }
 }

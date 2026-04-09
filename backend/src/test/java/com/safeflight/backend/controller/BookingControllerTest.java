@@ -19,6 +19,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -46,10 +47,13 @@ class BookingControllerTest {
 
     @MockitoBean
     private BookingService bookingService;
+
     @MockitoBean
     private FlightService flightService;
+
     @MockitoBean
     private FareService fareService;
+
     @MockitoBean
     private UserService userService;
 
@@ -85,26 +89,26 @@ class BookingControllerTest {
 
     @Test
     void createBooking_Successful_ShouldRedirect() throws Exception {
-        User mockUser = new User();
-        mockUser.setId(1L);
-        mockUser.setEmail("test@example.com");
+        User bookingUser = new User();
+        bookingUser.setId(1L);
+        bookingUser.setEmail("test@example.com");
 
-        Flight mockFlight = new Flight();
-        mockFlight.setId(1L);
-        mockFlight.setAvailableSeats(10);
-        mockFlight.setDomestic(true);
-        mockFlight.setBasePrice(100.0);
+        Flight bookingFlight = new Flight();
+        bookingFlight.setId(1L);
+        bookingFlight.setAvailableSeats(10);
+        bookingFlight.setDomestic(true);
+        bookingFlight.setBasePrice(100.0);
 
-        Booking mockBooking = new Booking();
-        mockBooking.setId(100L);
+        Booking createdBooking = new Booking();
+        createdBooking.setId(100L);
 
-        FareBreakdownDto mockFare = new FareBreakdownDto();
-        mockFare.setTotalFare(150.0);
+        FareBreakdownDto fareBreakdown = new FareBreakdownDto();
+        fareBreakdown.setTotalFare(150.0);
 
-        when(userService.findByEmail(anyString())).thenReturn(mockUser);
-        when(flightService.getFlightById(anyLong())).thenReturn(mockFlight);
-        when(bookingService.createBooking(any(), any(), any())).thenReturn(mockBooking);
-        when(fareService.calculateFare(any(), anyInt(), any())).thenReturn(mockFare);
+        when(userService.findByEmail(anyString())).thenReturn(bookingUser);
+        when(flightService.getFlightById(anyLong())).thenReturn(bookingFlight);
+        when(bookingService.createBooking(any(), any(), any())).thenReturn(createdBooking);
+        when(fareService.calculateFare(any(), anyInt(), any())).thenReturn(fareBreakdown);
 
         mockMvc.perform(post("/bookings/book/1")
                         .with(csrf())
@@ -154,15 +158,15 @@ class BookingControllerTest {
     @Test
     @WithMockUser(username = "user@test.com")
     void cancelBooking_Successful_ShouldRedirect() throws Exception {
-        User mockUser = new User();
-        mockUser.setId(1L);
-        mockUser.setEmail("user@test.com");
+        User bookingUser = new User();
+        bookingUser.setId(1L);
+        bookingUser.setEmail("user@test.com");
 
         Booking cancelledBooking = new Booking();
         cancelledBooking.setId(101L);
         cancelledBooking.setRefundAmount(50.0);
 
-        when(userService.findByEmail(anyString())).thenReturn(mockUser);
+        when(userService.findByEmail(anyString())).thenReturn(bookingUser);
         when(bookingService.cancelBooking(anyLong(), any())).thenReturn(cancelledBooking);
 
         mockMvc.perform(post("/bookings/cancel/1")
@@ -178,21 +182,21 @@ class BookingControllerTest {
     @Test
     @WithMockUser(username = "user@test.com")
     void cancelConfirm_ValidUser_ShouldReturnCancelView() throws Exception {
-        User mockUser = new User();
-        mockUser.setId(1L);
-        mockUser.setEmail("user@test.com");
+        User currentUser = new User();
+        currentUser.setId(1L);
+        currentUser.setEmail("user@test.com");
 
-        Flight mockFlight = new Flight();
-        mockFlight.setFlightNumber("SF-123");
+        Flight bookedFlight = new Flight();
+        bookedFlight.setFlightNumber("SF-123");
 
-        Booking mockBooking = new Booking();
-        mockBooking.setId(99L);
-        mockBooking.setUser(mockUser);
-        mockBooking.setFlight(mockFlight);
-        mockBooking.setTotalFare(5000.0);
+        Booking userBooking = new Booking();
+        userBooking.setId(99L);
+        userBooking.setUser(currentUser);
+        userBooking.setFlight(bookedFlight);
+        userBooking.setTotalFare(5000.0);
 
-        when(userService.findByEmail("user@test.com")).thenReturn(mockUser);
-        when(bookingService.getBookingById(99L)).thenReturn(mockBooking);
+        when(userService.findByEmail("user@test.com")).thenReturn(currentUser);
+        when(bookingService.getBookingById(99L)).thenReturn(userBooking);
         when(bookingService.getRefundInfo(any())).thenReturn("Refund: €50.00");
 
         mockMvc.perform(get("/bookings/cancel/99").with(user("user@test.com")))
@@ -221,6 +225,34 @@ class BookingControllerTest {
         mockMvc.perform(get("/bookings/cancel/99")
                         .with(user("attacker@test.com")))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "user@test.com")
+    void bookingFormParams_WithOutboundOnly_ShouldReturnBookView() throws Exception {
+        Flight outboundFlight = new Flight();
+        outboundFlight.setId(1L);
+        outboundFlight.setFlightNumber("SF101");
+        outboundFlight.setAirline("Aer Lingus");
+        outboundFlight.setFromCity("Dublin");
+        outboundFlight.setToCity("Cork");
+        outboundFlight.setDepartureDate(LocalDate.of(2026, 3, 10));
+        outboundFlight.setDepartureTime(LocalTime.of(10, 0));
+        outboundFlight.setArrivalTime(LocalTime.of(11, 0));
+        outboundFlight.setDomestic(true);
+        outboundFlight.setBasePrice(4500.0);
+        outboundFlight.setAvailableSeats(20);
+
+        when(flightService.getFlightById(1L)).thenReturn(outboundFlight);
+
+        mockMvc.perform(get("/bookings/book")
+                        .with(user("user@test.com"))
+                        .param("outboundFlightId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("book"))
+                .andExpect(model().attributeExists("flight"))
+                .andExpect(model().attributeExists("bookingRequest"))
+                .andExpect(model().attributeDoesNotExist("selectedReturnFlight"));
     }
 
 }

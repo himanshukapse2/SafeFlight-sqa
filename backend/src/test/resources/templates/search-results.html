@@ -87,7 +87,7 @@
 
                             <div>
                                 <small
-                                    th:text="${flight.domestic?'Domestic':'International'}">Type</small>
+                                        th:text="${flight.domestic != null and flight.domestic ? 'Domestic' : 'International'}">Type</small>
                             </div>
 
                             <div>

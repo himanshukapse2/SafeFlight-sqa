@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle!=null?pageTitle+' | SafeFlight':'SafeFlight — FlightBookingSystem'}">SafeFlight</title>
+
+</head>
+
+<body>
+    <nav  sec:authorize="isAuthenticated()">
+        <div >
+            <a  th:href="@{/}">
+                SafeFlight
+            </a>
+
+            <button  type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span ></span>
+            </button>
+
+            <div  id="navbarNav">
+                <ul >
+                    <li >
+
+                        <a  th:href="@{/}">Search Flights</a>
+                    </li>
+
+                    <li >
+                        <a  th:href="@{/bookings/my}">My Bookings</a>
+                    </li>
+                </ul>
+
+                <ul >
+                    <li >
+                        <span >
+                            <span sec:authentication="principal.username">User</span>
+                        </span>
+                    </li>
+
+                    <li >
+                        <form th:action="@{/logout}" method="post" >
+                            <button type="submit" >
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main >
+
+        <div th:if="${successMessage}"  role="alert">
+            <span th:text="${successMessage}"></span>
+
+            <button type="button"  data-bs-dismiss="alert"></button>
+        </div>
+
+        <div th:if="${errorMessage}"  role="alert">
+
+            <span th:text="${errorMessage}"></span>
+
+            <button type="button"  data-bs-dismiss="alert"></button>
+        </div>
+
+        <div layout:fragment="content"></div>
+    </main>
+
+</body>
+
+</html>

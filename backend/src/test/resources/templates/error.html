@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error | SafeFlight</title>
+
+</head>
+
+<body >
+    <div >
+        <div >
+
+            <h3  th:text="${errorTitle?: 'Oops!'}">Error</h3>
+            <p  th:text=" ${errorMessage?:'Somethingwentwrong.Pleasetryagain.'}">Error description</p>
+
+            <a th:href="@{/}" >
+                Back to Home
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>

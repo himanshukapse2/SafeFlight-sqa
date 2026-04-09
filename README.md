@@ -17,3 +17,6 @@ Agile methodologies and Software Quality Assurance practices.
 ## Scope
 This application focuses on process quality and testing rather than
 production-level integrations.
+
+## Local Setup
+Please refer DEV_SETUP.md for detailed instructions on setting up the development environment.

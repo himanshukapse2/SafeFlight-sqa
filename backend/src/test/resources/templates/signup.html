@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | SafeFlight</title>
+
+</head>
+
+<body >
+    <div >
+        <div >
+
+            <div ><p>Join SafeFlight today</p>
+            </div>
+
+            <div th:if="${errorMessage}"  role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <form th:action="@{/signup}" method="post" th:object="${signupRequest}" name="signupForm" id="signupForm">
+
+                <div  style="margin-bottom:20px;">
+                    <label for="nameInput" >FullName</label>
+                    <div >
+                        <span ></span>
+                        <input type="text"
+                            
+                            id="nameInput"
+                            name="fullname"
+                            th:field="*{name}"
+                            placeholder="Enter your fullname"
+                            th:classappend="${#fields.hasErrors('name')}?'is-invalid':''"
+                            required
+                            maxlength="80">
+                    </div>
+                    <div  th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                </div>
+
+
+                <div  style="margin-bottom:20px;">
+                    <label for="emailInput" >Email Address</label>
+                    <div >
+                        <span ></span>
+                        <input type="email"
+                            
+                            id="emailInput"
+                            th:field="*{email}"
+                            placeholder="your.email@example.com"
+                            th:classappend="${#fields.hasErrors('email')}?'is-invalid':''"
+                            required>
+                    </div>
+
+                    <div  th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                </div>
+
+                <div  style="margin-bottom:25px;">
+
+                    <label for="passwordInput" >Password</label>
+                    <div >
+                        <span ></span>
+                        <input type="password"
+                            
+                            id="passwordInput"
+                            th:field="*{password}"
+                            placeholder="Enterpassword"
+                            th:classappend="${#fields.hasErrors('password')}?'is-invalid':''"
+                            required
+                            minlength="6">
+                    </div>
+
+                    <small  style="display:block;margin-top:5px;"> Minimum 6 characters required</small>
+                    <div  th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                </div>
+
+                <button type="submit"
+                    
+                    id="submitBtn"
+                    style="padding:10px;font-weight:600;font-size:16px;margin-top:15px;">
+                    Create Account
+                </button>
+            </form>
+
+            <div>
+
+                <span>Already have an account?</span>
+                <a th:href="@{/login}">SignIn</a>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+
+</html>

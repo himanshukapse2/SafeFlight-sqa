@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | SafeFlight</title>
+    <link rel="stylesheet" href="/css/login.css" />
+
+</head>
+
+<body >
+    <div class="main-container">
+        <div class="glass-box">
+
+            <div >
+                <h2 id="title">SafeFlight</h2>
+            </div>
+
+            <div id="text-1" th:if="${param.logout}" >
+                <span>You are logged out. Please sign in.</span>
+            </div>
+
+            <div th:if="${param.error}" >
+                <span>Invalid email or Password.</span>
+            </div>
+
+            <div th:if="${successMessage}" >
+                <span th:text="${successMessage}"></span>
+            </div>
+
+            <form th:action="@{/login}" method="post">
+
+                <div  style="margin-bottom:20px;">
+                    <label class="label" for="username" >Email Address:</label>
+                    <div >
+                        <span ></span>
+                        <input type="email"  id="username" name="username"
+                            placeholder="you@example.com" required autofocus>
+                    </div>
+                </div>
+
+                <div  style="margin-bottom:25px;">
+
+                    <label class="label" for="password" >Password:</label>
+                    <div >
+                        <span ></span>
+                        <input type="password"  id="password" name="password"
+                            placeholder="Enteryourpassword" required>
+                    </div>
+                </div>
+
+                <button type="submit" 
+                    class="button">
+                    Sign In
+                </button>
+            </form>
+
+            <div id="text-2">
+
+                <span >Don't have an account?</span>
+                <a th:href="@{/signup}" style="color:#256fe6;text-decoration:none;font-weight:600;">Sign up now.</a>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+
+</html>

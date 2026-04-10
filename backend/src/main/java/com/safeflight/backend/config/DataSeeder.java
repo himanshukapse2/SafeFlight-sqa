@@ -175,7 +175,7 @@ public class DataSeeder {
                                 LocalTime.of(23, 15), LocalTime.of(3, 30), 22200.0, 23, false),
                         new Flight(null, "SK1060", ETIHAD, CORK, DUBAI, LocalDate.of(2026, 3, 12),
                                 LocalTime.of(21, 0), LocalTime.of(23, 45), 16200.0, 30, false),
-                        
+
                         new Flight(null, "SK1041", AER_LINGUS, DUBLIN, CORK, LocalDate.of(2026, 3, 23),
                                 LocalTime.of(6, 0), LocalTime.of(8, 15), 4580.0, 43, true),
                         new Flight(null, "SK1042", ETIHAD, DUBLIN, CORK, LocalDate.of(2026, 3, 23),
@@ -336,26 +336,26 @@ public class DataSeeder {
                                 LocalTime.of(23, 15), LocalTime.of(3, 30), 24900.0, 17, false),
                         new Flight(null, "SK2800", ETIHAD, CORK, DUBAI, LocalDate.of(2026, 6, 9),
                                 LocalTime.of(21, 0), LocalTime.of(23, 45), 18900.0, 22, false),
-                                
+
                         // ===== Return flights for Dublin to Cork (Cork to Dublin, 5 days later) =====
                         new Flight(null, "SK3001", AER_LINGUS, CORK, DUBLIN, LocalDate.of(2026, 3, 15), LocalTime.of(7, 0), LocalTime.of(9, 15), 4600.0, 48, true),
                         new Flight(null, "SK3002", ETIHAD, CORK, DUBLIN, LocalDate.of(2026, 3, 15), LocalTime.of(10, 30), LocalTime.of(12, 45), 3900.0, 35, true),
-                        
+
                         new Flight(null, "SK3003", AER_LINGUS, CORK, DUBLIN, LocalDate.of(2026, 3, 16), LocalTime.of(7, 0), LocalTime.of(9, 15), 4650.0, 47, true),
                         new Flight(null, "SK3004", ETIHAD, CORK, DUBLIN, LocalDate.of(2026, 3, 16), LocalTime.of(10, 30), LocalTime.of(12, 45), 3920.0, 34, true),
-                        
+
                         new Flight(null, "SK3005", AER_LINGUS, CORK, DUBLIN, LocalDate.of(2026, 3, 17), LocalTime.of(7, 0), LocalTime.of(9, 15), 4680.0, 46, true),
                         new Flight(null, "SK3006", ETIHAD, CORK, DUBLIN, LocalDate.of(2026, 3, 17), LocalTime.of(10, 30), LocalTime.of(12, 45), 3940.0, 33, true),
-                        
+
                         new Flight(null, "SK3007", AER_LINGUS, CORK, DUBLIN, LocalDate.of(2026, 3, 18), LocalTime.of(7, 0), LocalTime.of(9, 15), 4680.0, 46, true),
                         new Flight(null, "SK3008", ETIHAD, CORK, DUBLIN, LocalDate.of(2026, 3, 18), LocalTime.of(10, 30), LocalTime.of(12, 45), 3940.0, 33, true),
-                        
+
                         new Flight(null, "SK3009", AER_LINGUS, CORK, DUBLIN, LocalDate.of(2026, 3, 28), LocalTime.of(7, 0), LocalTime.of(9, 15), 4680.0, 46, true),
                         new Flight(null, "SK3010", ETIHAD, CORK, DUBLIN, LocalDate.of(2026, 3, 28), LocalTime.of(10, 30), LocalTime.of(12, 45), 3940.0, 33, true),
-                        
+
                         new Flight(null, "SK3011", AER_LINGUS, CORK, DUBLIN, LocalDate.of(2026, 4, 7), LocalTime.of(7, 0), LocalTime.of(9, 15), 4680.0, 46, true),
                         new Flight(null, "SK3012", ETIHAD, CORK, DUBLIN, LocalDate.of(2026, 4, 7), LocalTime.of(10, 30), LocalTime.of(12, 45), 3940.0, 33, true),
-                        
+
                         new Flight(null, "SK3013", AER_LINGUS, CORK, DUBLIN, LocalDate.of(2026, 6, 14), LocalTime.of(7, 0), LocalTime.of(9, 15), 5090.0, 40, true),
                         new Flight(null, "SK3014", ETIHAD, CORK, DUBLIN, LocalDate.of(2026, 6, 14), LocalTime.of(10, 30), LocalTime.of(12, 45), 4290.0, 27, true)
                     ));

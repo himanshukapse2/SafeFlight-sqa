@@ -17,13 +17,13 @@ SafeFlight application has several distinctive features:
 - Management of user accounts i.e. signup and login validation
 - Search for available flights (one-way or round-trip)
 - Booking and Cancelling of a specific flight
-- Maintanese of user's flight information (history of booking and cancellation)
+- Maintenance of user's flight information (history of booking and cancellation)
 
 ## Tech Stack
 - Frontend: HTML, CSS, Thymeleaf
 - Backend: Java, Spring Boot
-- Testing: JUnit, Kiwi TCMS
-- CI: Github Actions
+- Testing: JUnit, Kiwi TCMS, Mutation Testing
+- CI: GitHub Actions
 - Static Analysis: SonarCloud
 
 ## System Requirements
@@ -90,9 +90,11 @@ As shown in the following image, you can enter your full name, email address and
 <img width="500" height="350" alt="Screenshot 2026-04-02 at 21 49 00" src="https://github.com/user-attachments/assets/b383f92f-73ce-4cc6-8f0d-156d8ed15bce" />
 
 ### 2. Search for Flights
-After you log in, the following page will show up. You can choose to search for either single trip or round trip. Then you need to enter the From City, To City, Travel Date and Return Date (in the case of round trip). Then you can click the search button to view the search results.
+After you log in, the following page will show up. You can choose to search for either single trip or round trip. Then you need to enter the From City(Source), ToC ity(Destination), Travel Date and Return Date (in the case of round trip). 
+Then you can click the search button to view the search results.
 
-**Note**: The initial data is provided in /backend/src/main/java/com/safeflight/backend/config/DataSeeder.java file. Only the flights provided in that file will be displayed as search results. The same data will be seeded every time when running the application. If you want change this, you can set the property app.seed-data.force-reload to false in the /backend/src/main/resources/application.properties file.
+**Note**: The initial data is provided in /backend/src/main/java/com/safeflight/backend/config/DataSeeder.java file. Only the flights provided in that file will be displayed as search results.
+The same data will be seeded every time when running the application. If you want change this, you can set the property app.seed-data.force-reload to false in the /backend/src/main/resources/application.properties file.
 
 <img width="500" height="350" alt="Screenshot 2026-04-02 at 21 54 33" src="https://github.com/user-attachments/assets/ba63ef31-698c-4e28-948e-f1690b8c8971" />
 
@@ -102,7 +104,8 @@ As shown in the following image, in the round trip case, you can select one go t
 
 ### 3. Book a Flight
 
-In the following page, you can review the information of your selected flight. You need to enter Passenger Name, Age, Extra Baggage and choose whether you're a millitary personnel. You can click Back to Search button to select another flight or click Confirm Booking button to book this flight.
+In the following page, you can review the information of your selected flight. You need to enter Passenger Name, Age, Extra Baggage and choose whether you're a military personnel. 
+You can click Back to Search button to select another flight or click Confirm Booking button to book this flight.
 
 <img width="500" height="350" alt="Screenshot 2026-04-02 at 21 55 24" src="https://github.com/user-attachments/assets/8c1e5ee8-f20f-44b8-85c1-f5e39e6d172e" />
 

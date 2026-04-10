@@ -20,8 +20,10 @@ SafeFlight application has several distinctive features:
 - Maintanese of user's flight information (history of booking and cancellation)
 
 ## Tech Stack
+- Frontend: HTML, CSS, Thymeleaf
 - Backend: Java, Spring Boot
-- Testing: JUnit, Selenium
+- Testing: JUnit, Selenium, Kiwi TCMS
+- CI: Github Actions
 - Static Analysis: SonarCloud
 
 ## System Requirements
@@ -89,6 +91,8 @@ As shown in the following image, you can enter your full name, email address and
 
 ### 2. Search for Flights
 After you log in, the following page will show up. You can choose to search for either single trip or round trip. Then you need to enter the From City, To City, Travel Date and Return Date (in the case of round trip). Then you can click the search button to view the search results.
+
+**Note**: The initial data is provided in /backend/src/main/java/com/safeflight/backend/config/DataSeeder.java file. Only the flights provided in that file will be displayed as search results. The same data will be seeded every time when running the application. If you want change this, you can set the property app.seed-data.force-reload to false in the /backend/src/main/resources/application.properties file.
 
 <img width="500" height="350" alt="Screenshot 2026-04-02 at 21 54 33" src="https://github.com/user-attachments/assets/ba63ef31-698c-4e28-948e-f1690b8c8971" />
 

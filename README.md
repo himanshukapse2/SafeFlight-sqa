@@ -22,7 +22,7 @@ SafeFlight application has several distinctive features:
 ## Tech Stack
 - Frontend: HTML, CSS, Thymeleaf
 - Backend: Java, Spring Boot
-- Testing: JUnit, Selenium, Kiwi TCMS
+- Testing: JUnit, Kiwi TCMS
 - CI: Github Actions
 - Static Analysis: SonarCloud
 
@@ -48,7 +48,7 @@ SafeFlight-sqa/
 │   │   │   │   └── exception/
 │   │   │   └── resources/
 │   │   │       ├── application.properties
-│   │   │       ├── templates/     # JavaScript templates
+│   │   │       ├── templates/     
 │   │   │       └── static/        # CSS
 │   │   └── test/
 │   ├── pom.xml

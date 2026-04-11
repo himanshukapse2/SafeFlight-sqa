@@ -49,14 +49,11 @@ jobs:
       - name: Run Snyk Dependency Scan (HTML Report)
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --json | snyk-to-html -o snyk-report.html || echo "Snyk HTML generation failed"
+        run: |
+          snyk test --json | snyk-to-html -o snyk-report.html || echo "Snyk HTML generation failed"
+          snyk test --sarif-file-output=snyk.sarif || echo "Snyk SARIF generation failed"
 
-      - name: Run Snyk Scan (SARIF)
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --sarif-file-output=snyk.sarif || echo "Snyk SARIF generation failed"
-
-      - name: Check if SARIF exists
+      - name: Check if SARIF exists for Dashboard
         id: check_sarif
         run: |
           if [ -f snyk.sarif ]; then
@@ -79,8 +76,23 @@ jobs:
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         run: |
           mkdir -p ../pages/pit-report
-          cp -R target/pit-reports/. ../pages/pit-report/
-          [ -f snyk-report.html ] && cp snyk-report.html ../pages/dependency-scan.html
+          mkdir -p ../pages/jacoco-report
+          
+          # 1. JaCoCo Copy (As per your local path: target/site/jacoco)
+          if [ -d target/site/jacoco ]; then
+            cp -R target/site/jacoco/. ../pages/jacoco-report/
+          fi
+          
+          # 2. PIT Report Copy (Wildcard for timestamp folder)
+          if [ -d target/pit-reports ]; then
+            cp -R target/pit-reports/*/. ../pages/pit-report/
+          fi
+          
+          # 3. Snyk HTML Copy
+          if [ -f snyk-report.html ]; then
+            cp snyk-report.html ../pages/dependency-scan.html
+          fi
+          
           touch ../pages/.nojekyll
 
       - name: Upload Pages artifact

@@ -91,7 +91,7 @@ jobs:
 
   deploy-pages:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
-    needs: build-test-security
+    needs: build-test-sonar
     runs-on: ubuntu-latest
     environment:
       name: github-pages

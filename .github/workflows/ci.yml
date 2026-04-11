@@ -44,26 +44,34 @@ jobs:
 
       # --- SNYK SECURITY SCAN START ---
       - name: Install Snyk & Snyk-to-HTML
-        run: |
-          npm install -g snyk snyk-to-html
+        run: npm install -g snyk snyk-to-html
 
       - name: Run Snyk Dependency Scan (HTML Report)
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --json | snyk-to-html -o snyk-report.html || true
+        run: snyk test --json | snyk-to-html -o snyk-report.html || echo "Snyk HTML generation failed"
 
-      - name: Run Snyk Scan (SARIF for GitHub Security Dashboard)
+      - name: Run Snyk Scan (SARIF)
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --sarif-file-output=snyk.sarif || true
+        run: snyk test --sarif-file-output=snyk.sarif || echo "Snyk SARIF generation failed"
+
+      - name: Check if SARIF exists
+        id: check_sarif
+        run: |
+          if [ -f snyk.sarif ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Upload SARIF to GitHub Security Tab
-        if: always()
-        uses: github/codeql-action/upload-sarif@v3
+        if: steps.check_sarif.outputs.exists == 'true'
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: backend/snyk.sarif
+      # --- SNYK SECURITY SCAN END ---
 
-      # --- PIT REPORT START ---
       - name: Run mutation tests (PIT)
         run: ./mvnw org.pitest:pitest-maven:mutationCoverage
 
@@ -72,7 +80,6 @@ jobs:
         run: |
           mkdir -p ../pages/pit-report
           cp -R target/pit-reports/. ../pages/pit-report/
-          # Check if report exists before copying
           [ -f snyk-report.html ] && cp snyk-report.html ../pages/dependency-scan.html
           touch ../pages/.nojekyll
 

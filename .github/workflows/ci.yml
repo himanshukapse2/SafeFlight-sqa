@@ -50,16 +50,15 @@ jobs:
       - name: Run Snyk Dependency Scan (HTML Report)
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --json | snyk-to-html -o snyk-report.html
-        continue-on-error: true
+        run: snyk test --json | snyk-to-html -o snyk-report.html || true
 
       - name: Run Snyk Scan (SARIF for GitHub Security Dashboard)
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --sarif-file-output=snyk.sarif
-        continue-on-error: true
+        run: snyk test --sarif-file-output=snyk.sarif || true
 
       - name: Upload SARIF to GitHub Security Tab
+        if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: backend/snyk.sarif
@@ -73,7 +72,8 @@ jobs:
         run: |
           mkdir -p ../pages/pit-report
           cp -R target/pit-reports/. ../pages/pit-report/
-          cp snyk-report.html ../pages/dependency-scan.html
+          # Check if report exists before copying
+          [ -f snyk-report.html ] && cp snyk-report.html ../pages/dependency-scan.html
           touch ../pages/.nojekyll
 
       - name: Upload Pages artifact

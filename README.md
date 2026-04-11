@@ -22,9 +22,10 @@ SafeFlight application has several distinctive features:
 ## Tech Stack
 - Frontend: HTML, CSS, Thymeleaf
 - Backend: Java, Spring Boot
-- Testing: JUnit, Kiwi TCMS, Mutation Testing
+- Testing: JUnit, Kiwi TCMS, Mutation Testing (PIT)
 - CI: GitHub Actions
 - Static Analysis: SonarCloud
+- Security: Snyk (Dependency Scanning & SCA)
 
 ## System Requirements
 - **Java**: JDK 17 or higher

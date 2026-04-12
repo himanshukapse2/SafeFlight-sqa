@@ -172,11 +172,10 @@
                 <version>1.19.4</version>
                 <configuration>
                     <targetClasses>
-                        <param>com.safeflight.*</param>
+                        <param>com.safeflight.backend.*</param>
                     </targetClasses>
                     <targetTests>
-                        <param>com.safeflight.*Test</param>
-                        <param>com.safeflight.*Tests</param>
+                        <param>com.safeflight.backend.*</param>
                     </targetTests>
                     <mutationThreshold>80</mutationThreshold>
                     <threads>4</threads>
@@ -185,8 +184,8 @@
                         <param>XML</param>
                     </outputFormats>
                     <excludedClasses>
-                        <param>com.safeflight.config.*</param>
-                        <param>com.safeflight.entity.*</param>
+                        <param>com.safeflight.backend.config.*</param>
+                        <param>com.safeflight.backend.entity.*</param>
                     </excludedClasses>
                     <timestampedReports>false</timestampedReports>
                 </configuration>
